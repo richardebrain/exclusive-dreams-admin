@@ -22,7 +22,7 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
-import { RegisterAdminForm } from "./type";
+import { AdminType, RegisterAdminForm } from "./type";
 import { toast } from "react-toastify";
 
 const firebaseConfig = {
@@ -119,8 +119,11 @@ export const signInAdminWithEmail = async (email: string, password: string) => {
     const adminRef = doc(adminsCollection, admin.uid);
     const adminSnap = await getDoc(adminRef);
     if (adminSnap.exists()) {
+      const { createdAt, ...rest } = adminSnap.data();
       toast.success("admin signed in successfully");
-      return admin;
+      return {
+        ...rest as AdminType
+      };
     } else {
       toast.error("admin not found");
       return;
