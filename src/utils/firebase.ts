@@ -35,7 +35,7 @@ const firebaseConfig = {
   measurementId: "G-VFZGYVVGYQ",
 };
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+export const auth = getAuth();
 const db = getFirestore();
 const adminsCollection = collection(db, "admins");
 
@@ -54,6 +54,7 @@ export const createBasicAdminWithEmail = async (data: RegisterAdminForm) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       // ..
+      console.log(errorCode, errorMessage, "error creating admin")
       if (errorCode === "auth/email-already-in-use") {
         toast.error("Email already in use, please sign in");
         return;
@@ -71,6 +72,7 @@ export const createBasicAdminWithEmail = async (data: RegisterAdminForm) => {
         await setDoc(adminRef, {
           email: admin.email,
           uid: admin.uid,
+          role:"admin",
           ...rest,
           createdAt: serverTimestamp(),
         });
@@ -120,6 +122,11 @@ export const signInAdminWithEmail = async (email: string, password: string) => {
     const adminSnap = await getDoc(adminRef);
     if (adminSnap.exists()) {
       const { createdAt, ...rest } = adminSnap.data();
+      if(rest.role !== "admin"){
+        toast.error("User with this email can't sign in as admin");
+        await auth.signOut();
+        return;
+      }
       toast.success("admin signed in successfully");
       return {
         ...rest as AdminType
@@ -141,3 +148,6 @@ export const signOutAdmin = async () => {
 };
 const storage = getStorage();
 const storageRef = ref(storage, "images");
+
+// store db
+const storeCollections = collection(db, "store");

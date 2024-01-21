@@ -13,6 +13,7 @@ import AppleLogo from "@public/images/logos/apple.svg";
 import { useAppDispatch, useAppSelector } from "@redux/type";
 import { setAdmin } from "@/redux/admin.slice";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -34,25 +35,33 @@ const Page = () => {
     const res = await signInAdminWithEmail(data.email, data.password);
     if (res?.uid) {
       dispatch(setAdmin(res));
+      router.push("/dashboard");
     }
     console.log(res, "response");
   };
   useEffect(() => {
     if (admin) {
-      router.push("/");
+      router.push("/dashboard");
     }
   }, []);
   useEffect(() => {
     if (admin) {
-      router.push("/");
+      router.push("/dashboard");
     }
   }, [admin]);
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <Image
+          className="mx-auto h-12 w-auto"
+          src="/logo.png"
+          alt="Exclusive dreams Logo"
+          width={48}
+          height={48}
+        />
         <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
+          Sign in to your Admin Account
         </h2>
       </div>
 
@@ -80,25 +89,10 @@ const Page = () => {
             />
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-black  checked:bg-black checked:border-transparent focus:outline-none "
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-3 block text-sm leading-6 text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
-
               <div className="text-sm leading-6">
-                <a className="font-semibold text-blue-600 hover:text-blue-500">
+                <Link className="font-semibold text-blue-600 hover:text-blue-500" href={'#'}>
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -130,20 +124,6 @@ const Page = () => {
                 </span>
               </div>
             </div> */}
-
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <button className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-1.5 text-black border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 shadow-sm">
-                <svg
-                  className="w-6 h-6 text-rose-500"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"></path>
-                </svg>
-                <span className="text-sm font-semibold leading-6">Google</span>
-              </button>
-            </div>
           </div>
         </div>
 
