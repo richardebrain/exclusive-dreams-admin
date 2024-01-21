@@ -12,7 +12,15 @@ import {
 
 export const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
-  { name: "Products", href: "/products", icon: FolderPlusIcon, current: false },
+  {
+    name: "Products", href: "/products", icon: FolderPlusIcon, current: false, children: [
+      {
+        name: "All Products", href: "/products", icon: FolderPlusIcon, current: false,
+      },
+      { name: "Add Product", href: "/products/add-new", icon: FolderPlusIcon, current: false, }
+    ]
+  },
+  // 
   { name: "Users", href: "/users", icon: UserGroupIcon, current: false },
   { name: "Orders", href: "/orders", icon: ShoppingCartIcon, current: false },
   //   { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
