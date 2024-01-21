@@ -20,17 +20,17 @@ const FileUploader = forwardRef<
 ) {
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    const handleUpload = async () => {
-      if (!files) return;
-      let img64 = [];
-      for (let i = 0; i < files?.length; i++) {
-        const file = files[i];
-        const base64 = await toBase64(file);
-        img64.push(base64);
-      }
-      return img64;
-    };
-    const image64 = await handleUpload();
+    // const handleUpload = async () => {
+    //   if (!files) return;
+    //   let img64 = [];
+    //   for (let i = 0; i < files?.length; i++) {
+    //     const file = files[i];
+    //     const base64 = await toBase64(file);
+    //     img64.push(base64);
+    //   }
+    //   return img64;
+    // };
+    // const image64 = await handleUpload();
     return await onChange(event);
   };
   return (
