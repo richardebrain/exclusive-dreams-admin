@@ -1,6 +1,6 @@
 "use client";
 import CustomInput from "@/components/forms/CustomInput";
-import { AddProductForm } from "@/utils/type";
+import { AddProductForm, UploadProductType } from "@/utils/type";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,6 +9,7 @@ import Spinner from "@/components/Spinner";
 import Select from "react-select";
 import FileUploader from "@/components/forms/FileUploader";
 import { fileExtensionTest, fileSizeTest } from "@/utils/yupTest";
+import { addProductToStore, uploadImage } from "@/utils/firebase";
 
 const schema = yup.object().shape({
   productTitle: yup.string().required("Product Title is required"),
@@ -59,7 +60,21 @@ export default function Page() {
   const handleProductSubmit = async (
     data: Omit<AddProductForm, "productId">
   ) => {
-    console.log(data);
+    const arrOfImages = Array.from(data.imageUrl);
+    const res = await Promise.all(
+      arrOfImages.map(async (image) => {
+        const url = await uploadImage(image);
+        return url!;
+      })
+    );
+    const uploadProduct = {
+      ...data,
+      imageUrl: res,
+      productBrand: "Exclusive Dream",
+    };
+    return await addProductToStore(uploadProduct);
+
+    console.log(res);
   };
   return (
     <section className="">

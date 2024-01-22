@@ -1,7 +1,7 @@
 import { create } from "domain";
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { getStorage, ref } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -12,6 +12,7 @@ import {
 import {
   DocumentData,
   DocumentReference,
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -22,7 +23,12 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
-import { AdminType, RegisterAdminForm } from "./type";
+import {
+  AddProductForm,
+  AdminType,
+  RegisterAdminForm,
+  UploadProductType,
+} from "./type";
 import { toast } from "react-toastify";
 
 const firebaseConfig = {
@@ -54,7 +60,7 @@ export const createBasicAdminWithEmail = async (data: RegisterAdminForm) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       // ..
-      console.log(errorCode, errorMessage, "error creating admin")
+      console.log(errorCode, errorMessage, "error creating admin");
       if (errorCode === "auth/email-already-in-use") {
         toast.error("Email already in use, please sign in");
         return;
@@ -72,7 +78,7 @@ export const createBasicAdminWithEmail = async (data: RegisterAdminForm) => {
         await setDoc(adminRef, {
           email: admin.email,
           uid: admin.uid,
-          role:"admin",
+          role: "admin",
           ...rest,
           createdAt: serverTimestamp(),
         });
@@ -122,14 +128,14 @@ export const signInAdminWithEmail = async (email: string, password: string) => {
     const adminSnap = await getDoc(adminRef);
     if (adminSnap.exists()) {
       const { createdAt, ...rest } = adminSnap.data();
-      if(rest.role !== "admin"){
+      if (rest.role !== "admin") {
         toast.error("User with this email can't sign in as admin");
         await auth.signOut();
         return;
       }
       toast.success("admin signed in successfully");
       return {
-        ...rest as AdminType
+        ...(rest as AdminType),
       };
     } else {
       toast.error("admin not found");
@@ -148,6 +154,51 @@ export const signOutAdmin = async () => {
 };
 const storage = getStorage();
 const storageRef = ref(storage, "images");
-
+export const uploadImage = async (image: File) => {
+  const imageRef = ref(storageRef, image.name);
+  const returnUrl = await uploadBytes(imageRef, image).then(
+    async (snapshot) => {
+      if (snapshot) {
+        const downloadUrl = await getDownloadURL(snapshot.ref);
+        return downloadUrl;
+      }
+    }
+  );
+  if (!returnUrl) return;
+  return returnUrl;
+};
 // store db
 const storeCollections = collection(db, "store");
+
+export const addProductToStore = async (
+  data: Omit<UploadProductType, "href" | "productId">
+) => {
+  const productRef = doc(storeCollections);
+  const productSnap = await getDoc(productRef);
+  if (productSnap.exists()) {
+    toast.error("product already exists");
+    return;
+  }
+  try {
+    await setDoc(productRef, {
+      ...data,
+      productId: productRef.id,
+      href: productRef.id,
+      createdAt: serverTimestamp(),
+    });
+    toast.success("product added successfully");
+    return;
+  } catch (error) {
+    console.log(error, "error adding product to store");
+    return;
+  }
+};
+
+export const getAllProducts = async () => {
+  const products = await getDocs(storeCollections);
+  const productsData: UploadProductType[] = [];
+  products.forEach((product) => {
+    productsData.push(product.data() as UploadProductType);
+  });
+  return productsData;
+};

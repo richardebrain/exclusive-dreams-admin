@@ -30,3 +30,17 @@ export interface AdminType {
     lastName: string;
     uid: string;
 }
+
+export type UploadProductType = {
+    productTitle: string;
+    productBrand: string;
+    highlights: string;
+    productId: string;
+    color: string;
+    sizes: string;
+    price: string;
+    category: string;
+    imageUrl: string[];
+    href: string;
+    quantity: string;
+}
