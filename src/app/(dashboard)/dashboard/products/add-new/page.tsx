@@ -18,7 +18,11 @@ const schema = yup.object().shape({
     .required("Price is required")
     // also with decimal numbers
     .matches(/^\d+(\.\d{1,2})?$/, "Invalid Amount"),
-  color: yup.string().required("Color is required"),
+  // filter out the commas
+  color: yup
+    .string()
+    .required("Color is required")
+    .matches(/^[a-zA-Z]+$/, "Must be only letters"),
   quantity: yup
     .string()
     .required("Quantity is required")
@@ -73,8 +77,6 @@ export default function Page() {
       productBrand: "Exclusive Dream",
     };
     return await addProductToStore(uploadProduct);
-
-    console.log(res);
   };
   return (
     <section className="">

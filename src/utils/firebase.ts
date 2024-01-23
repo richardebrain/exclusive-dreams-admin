@@ -196,9 +196,11 @@ export const addProductToStore = async (
 
 export const getAllProducts = async () => {
   const products = await getDocs(storeCollections);
-  const productsData: UploadProductType[] = [];
-  products.forEach((product) => {
-    productsData.push(product.data() as UploadProductType);
+  const productsList = products.docs.map((doc) => {
+    const { createdAt, ...rest } = doc.data();
+    return {
+      ...(rest as UploadProductType),
+    };
   });
-  return productsData;
+  return productsList;
 };

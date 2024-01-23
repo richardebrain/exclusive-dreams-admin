@@ -61,7 +61,7 @@ export default function Page() {
             Headwears
           </button>
         </div>
-        <ProductsView type={currentTab} />
+        <ProductsView type={currentTab} products={products} />
       </div>
     </main>
   );
