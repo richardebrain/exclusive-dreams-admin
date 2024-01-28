@@ -2,15 +2,18 @@
 import { navigation, teams } from "@/utils/navigations";
 import Link from "next/link";
 import React from "react";
-import { Disclosure } from '@headlessui/react'
-import { ChevronUpIcon } from '@heroicons/react/20/solid'
+import { Disclosure } from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/20/solid";
 import { usePathname } from "next/navigation";
+import { useAppSelector } from "@redux/type";
+import Image from "next/image";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 const DesktopSidebar = () => {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const { admin } = useAppSelector((state) => state.admin);
   return (
     <div>
       {" "}
@@ -18,10 +21,12 @@ const DesktopSidebar = () => {
         {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
           <div className="flex h-16 shrink-0 items-center">
-            <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-              alt="Your Company"
+            <Image
+              className="h-8 w-auto backdrop-invert"
+              src="/logo.png"
+              alt="Exclusive dreams Logo"
+              width={32}
+              height={32}
             />
           </div>
           <nav className="flex flex-1 flex-col">
@@ -34,7 +39,7 @@ const DesktopSidebar = () => {
                         <Link
                           href={item.href}
                           className={classNames(
-                           item.href === pathname
+                            item.href === pathname
                               ? "bg-gray-800 text-white"
                               : "text-gray-400 hover:text-white hover:bg-gray-800",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -50,12 +55,14 @@ const DesktopSidebar = () => {
                         <Disclosure>
                           {({ open }: { open: boolean }) => (
                             <>
-                              <Disclosure.Button className={classNames(
-                                item.current
-                                  ? "bg-gray-800 text-white"
-                                  : "text-gray-400 hover:text-white hover:bg-gray-800",
-                                "group w-full flex justify-between gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                              )}>
+                              <Disclosure.Button
+                                className={classNames(
+                                  item.current
+                                    ? "bg-gray-800 text-white"
+                                    : "text-gray-400 hover:text-white hover:bg-gray-800",
+                                  "group w-full flex justify-between gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                                )}
+                              >
                                 <div className="flex items-center gap-x-3">
                                   <item.icon
                                     className="h-6 w-6 shrink-0"
@@ -64,18 +71,22 @@ const DesktopSidebar = () => {
                                   {item.name}
                                 </div>
                                 <ChevronUpIcon
-                                  className={`${open ? 'rotate-180 transform' : ''
-                                    } h-5 w-5 text-purple-500`}
+                                  className={`${
+                                    open ? "rotate-180 transform" : ""
+                                  } h-5 w-5 text-purple-500`}
                                 />
                               </Disclosure.Button>
                               <Disclosure.Panel className="">
-                                <ul role="list" className="flex flex-col gap-y-2 pl-9">
+                                <ul
+                                  role="list"
+                                  className="flex flex-col gap-y-2 pl-9"
+                                >
                                   {item.children.map((child) => (
                                     <li key={child.name}>
                                       <Link
                                         href={child.href}
                                         className={classNames(
-                                         child.href === pathname
+                                          child.href === pathname
                                             ? "bg-gray-800 text-white"
                                             : "text-gray-400 hover:text-white hover:bg-gray-800",
                                           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -126,20 +137,36 @@ const DesktopSidebar = () => {
                   ))}
                 </ul>
               </li>
-              <li className="-mx-6 mt-auto">
-                <a
-                  href="#"
-                  className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
-                >
-                  <img
-                    className="h-8 w-8 rounded-full bg-gray-800"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                  <span className="sr-only">Your profile</span>
-                  <span aria-hidden="true">Tom Cook</span>
-                </a>
-              </li>
+              {admin && admin.uid ? (
+                <li className="-mx-6 mt-auto">
+                  <a
+                    href="#"
+                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
+                  >
+                    <Image
+                      className="h-8 w-8 rounded-full bg-gray-800"
+                      src="/user-logo.png"
+                      alt=""
+                      width={32}
+                      height={32}
+                    />
+                    <span className="sr-only">Your profile</span>
+                    <span aria-hidden="true">{admin.firstName}</span>
+                  </a>
+                </li>
+              ) : (
+                <li className="-mx-6 mt-auto">
+                  <Link
+                    href="/login"
+                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800 bg-gray-500 text-center"
+                  >
+                    <span className="sr-only">Login</span>
+                    <span aria-hidden="true" className="pl-6">
+                      Login
+                    </span>
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
         </div>
