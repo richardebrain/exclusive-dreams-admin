@@ -16,9 +16,9 @@ export default function Page() {
   const [currentTab, setCurrentTab] = useState("all");
 
   return (
-    <main className="flex flex-col gap-10">
+    <main className="flex flex-col gap-10 max-w-4xl px-12 mx-auto">
       <h3 className="text-3xl font-bold">Products</h3>
-      <div className="flex flex-col gap-16">
+      <div className="w-max flex flex-col gap-16">
         <div className="flex gap-4">
           <button
             className={`px-4 py-2 rounded-md ${
