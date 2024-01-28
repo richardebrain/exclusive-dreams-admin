@@ -25,22 +25,47 @@ export type LoginType = {
 };
 
 export interface AdminType {
-    email: string;
-    firstName: string;
-    lastName: string;
-    uid: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  uid: string;
 }
 
 export type UploadProductType = {
-    productTitle: string;
-    productBrand: string;
-    highlights: string;
-    productId: string;
-    color: string;
-    sizes: string;
-    price: string;
-    category: string;
-    imageUrl: string[];
-    href: string;
-    quantity: string;
+  productTitle: string;
+  productBrand: string;
+  highlights: string;
+  productId: string;
+  color: string;
+  sizes: string;
+  price: string;
+  category: string;
+  imageUrl: string[];
+  href: string;
+  quantity: string;
 }
+
+export interface OrderItemType {
+  productTitle: string;
+  productBrand: string;
+  productId: string;
+  color: string;
+  sizes: string;
+  price: string;
+  category: string;
+  imageUrl: string[];
+  href: string;
+  quantity: string;
+}
+
+export interface OrderType {
+  orderId: string;
+  orderDate: string;
+  orderStatus: string;
+  orderTotal: string;
+  orderItems: OrderItemType[];
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  customerAddress: string;
+} 
