@@ -25,7 +25,6 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
             </div>
           </div>
         ))}
-      {/* show only products with category of T-Shirts */}
       {
         products
           .filter((product) => product.category === type)
@@ -47,69 +46,7 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
               </div>
             </div>
           ))}
-      {/* show only products with category of Hoodies */}
-      {/* {type === "hoodies" &&
-        products
-          .filter((product) => product.category === "Hoodies")
-          .map((product) => (
-            <div className="flex flex-col gap-4" key={product.name}>
-              <img
-                src={product.image}
-                alt=""
-                className="w-48
-                        h-48 object-cover"
-              />
-              <div className="flex flex-col gap-2">
-                <h3 className="text-lg font-bold">{product.name}</h3>
-                <span className="text-sm font-semibold">
-                  {product.category}
-                </span>
-                <span className="text-sm font-semibold">{product.price}</span>
-              </div>
-            </div>
-          ))} */}
-      {/* show only products with category of Bottoms */}
-      {/* {type === "bottoms" &&
-        products
-          .filter((product) => product.category === "Bottoms")
-          .map((product) => (
-            <div className="flex flex-col gap-4" key={product.name}>
-              <img
-                src={product.image}
-                alt=""
-                className="w-48
-                        h-48 object-cover"
-              />
-              <div className="flex flex-col gap-2">
-                <h3 className="text-lg font-bold">{product.name}</h3>
-                <span className="text-sm font-semibold">
-                  {product.category}
-                </span>
-                <span className="text-sm font-semibold">{product.price}</span>
-              </div>
-            </div>
-          ))} */}
-      {/* show only products with category of Headwear */}
-      {/* {type === "headwears" &&
-        products
-          .filter((product) => product.category === "Headwear")
-          .map((product) => (
-            <div className="flex flex-col gap-4" key={product.name}>
-              <img
-                src={product.image}
-                alt=""
-                className="w-48
-                        h-48 object-cover"
-              />
-              <div className="flex flex-col gap-2">
-                <h3 className="text-lg font-bold">{product.name}</h3>
-                <span className="text-sm font-semibold">
-                  {product.category}
-                </span>
-                <span className="text-sm font-semibold">{product.price}</span>
-              </div>
-            </div>
-          ))} */}
+  
     </div>
   );
 };

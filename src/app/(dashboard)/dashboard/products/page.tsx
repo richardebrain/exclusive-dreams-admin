@@ -22,7 +22,7 @@ export default function Page() {
         <div className="flex gap-4">
           <button
             className={`px-4 py-2 rounded-md ${
-              currentTab === "all" ? "bg-purple-500 text-white" : ""
+              currentTab === "all" ? "bg-black text-white" : ""
             }`}
             onClick={() => setCurrentTab("all")}
           >
@@ -30,7 +30,7 @@ export default function Page() {
           </button>
           <button
             className={`px-4 py-2 rounded-md ${
-              currentTab === "t-shirts" ? "bg-purple-500 text-white" : ""
+              currentTab === "t-shirts" ? "bg-black text-white" : ""
             }`}
             onClick={() => setCurrentTab("t-shirts")}
           >
@@ -38,7 +38,7 @@ export default function Page() {
           </button>
           <button
             className={`px-4 py-2 rounded-md ${
-              currentTab === "hoodies" ? "bg-purple-500 text-white" : ""
+              currentTab === "hoodies" ? "bg-black text-white" : ""
             }`}
             onClick={() => setCurrentTab("hoodies")}
           >
@@ -46,7 +46,7 @@ export default function Page() {
           </button>
           <button
             className={`px-4 py-2 rounded-md ${
-              currentTab === "bottoms" ? "bg-purple-500 text-white" : ""
+              currentTab === "bottoms" ? "bg-black text-white" : ""
             }`}
             onClick={() => setCurrentTab("bottoms")}
           >
@@ -54,11 +54,19 @@ export default function Page() {
           </button>
           <button
             className={`px-4 py-2 rounded-md ${
-              currentTab === "headwears" ? "bg-purple-500 text-white" : ""
+              currentTab === "headwears" ? "bg-black text-white" : ""
             }`}
             onClick={() => setCurrentTab("headwears")}
           >
             Headwears
+          </button>
+          <button
+            className={`px-4 py-2 rounded-md ${
+              currentTab === "varsity-jackets" ? "bg-black text-white" : ""
+            }`}
+            onClick={() => setCurrentTab("varsity-jackets")}
+          >
+            Varsity Jackets
           </button>
         </div>
         <ProductsView type={currentTab} products={products} />
