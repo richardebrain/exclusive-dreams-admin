@@ -1,10 +1,8 @@
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import DesktopSidebar from "@/components/layouts/DesktopSidebar";
 import MobileSidebar from "@/components/layouts/MobileSidebar";
 import ProviderWrapper from "@/components/Provider";
-import { useEffect } from "react";
-import { useAppSelector } from "@/redux/type";
 
 const inter = Inter({ subsets: ["latin"] });
 
