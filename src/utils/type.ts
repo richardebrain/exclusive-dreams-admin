@@ -4,12 +4,12 @@ export interface AddProductForm {
   // productBrand: string; set when submitting product
   highlights: string;
   color: string;
-  sizes: string;
+  sizes?: string;
   price: string;
   category: string;
+  hasSize: boolean;
   imageUrl: FileList;
   // href: string;  set when submitting product
-  quantity: string;
 }
 
 export type RegisterAdminForm = {
@@ -37,12 +37,13 @@ export type UploadProductType = {
   highlights: string;
   productId: string;
   color: string;
-  sizes: string;
+  sizes?: string;
+  hasSize: boolean;
   price: string;
   category: string;
   imageUrl: string[];
   href: string;
-  quantity: string;
+  
 }
 
 export interface OrderItemType {
@@ -50,22 +51,56 @@ export interface OrderItemType {
   productBrand: string;
   productId: string;
   color: string;
-  sizes: string;
+  sizes?: string;
   price: string;
   category: string;
   imageUrl: string[];
   href: string;
-  quantity: string;
+  
 }
+
+export type ProductCheckoutType = {
+  productId: string;
+  productTitle: string;
+  price: string;
+  quantity: number;
+  size: string;
+  color: string;
+  imageUrl: string;
+  category: string;
+  hasSize: boolean;
+};
 
 export interface OrderType {
   orderId: string;
-  orderDate: string;
-  orderStatus: string;
-  orderTotal: string;
-  orderItems: OrderItemType[];
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  customerAddress: string;
+  amount: number;
+  cart: ProductCheckoutType[];
+  deliveryFee: number;
+  shipping: {
+    address: {
+      city: string;
+      country: string;
+      line1: string;
+      line2: null | string;
+      postal_code: string;
+      state: string;
+    };
+    carrier: null | string;
+    name: string;
+    phone: string;
+    tracking_number: null;
+  };
+  totalItems: number;
+  hasSize: boolean;
+  status:
+    | "requires_payment_method"
+    | "requires_confirmation"
+    | "requires_action"
+    | "processing"
+    | "requires_capture"
+    | "canceled"
+    | "succeeded";
+    deliveryStatus: "pending" | "shipped" | "delivered"|"cancelled"|"order placed";
+    userId: string;
+    createdAt: number;
 } 

@@ -14,10 +14,12 @@ import {
   DocumentReference,
   addDoc,
   collection,
+  collectionGroup,
   doc,
   getDoc,
   getDocs,
   getFirestore,
+  orderBy,
   query,
   serverTimestamp,
   setDoc,
@@ -203,4 +205,19 @@ export const getAllProducts = async () => {
     };
   });
   return productsList;
+};
+
+const ordersCollections = collection(db, "orders");
+export const getAllOrders = async () => {
+  const queries = query(collectionGroup(db, "orders"));
+  const orders = await getDocs(queries);
+  const ordersList = orders.docs.map((doc) => {
+    const userId = doc.ref.parent.parent?.id;
+    const { ...rest } = doc.data();
+    return {
+      ...doc.data(),
+      userId,
+    };
+  });
+  return ordersList;
 };

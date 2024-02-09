@@ -10,6 +10,7 @@ import Select from "react-select";
 import FileUploader from "@/components/forms/FileUploader";
 import { fileExtensionTest, fileSizeTest } from "@/utils/yupTest";
 import { addProductToStore, uploadImage } from "@/utils/firebase";
+import { useEffect } from "react";
 
 const schema = yup.object().shape({
   productTitle: yup.string().required("Product Title is required"),
@@ -22,14 +23,20 @@ const schema = yup.object().shape({
   color: yup
     .string()
     .required("Color is required")
-    .matches(/^[a-zA-Z]+$/, "Must be only letters"),
-  quantity: yup
-    .string()
-    .required("Quantity is required")
-    .matches(/^[0-9]+$/, "Must be only digits"),
+    // filter out the commas
+    .matches(/^[a-zA-Z\s]+$/, "Can't add multiple colors"),
+  // quantity: yup
+  //   .string()
+  //   .required("Quantity is required")
+  //   .matches(/^[0-9]+$/, "Must be only digits"),
   highlights: yup.string().required("Highlights is required"),
   category: yup.string().required("Category is required"),
-  sizes: yup.string().required("Sizes is required"),
+  sizes: yup.string().when("category", {
+    is: (val: string) => val === "headwears",
+    then: (schema) => schema.notRequired(),
+    otherwise: (schema) =>
+      schema.required("Sizes are required for this category"),
+  }),
   imageUrl: yup
     .mixed<FileList>()
     .test("filesize", "File Size is too large", (value) => {
@@ -43,6 +50,7 @@ const schema = yup.object().shape({
       return true;
     })
     .defined("Product Image is required"),
+  hasSize: yup.boolean().required(),
 });
 
 const categories = [
@@ -57,9 +65,14 @@ export default function Page() {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    watch,
     control,
+    setValue,
   } = useForm<Omit<AddProductForm, "productId">>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      hasSize: true,
+    },
   });
   const handleProductSubmit = async (
     data: Omit<AddProductForm, "productId">
@@ -78,10 +91,19 @@ export default function Page() {
     };
     return await addProductToStore(uploadProduct);
   };
+  const watchCategory = watch("category");
+  useEffect(() => {
+    if (watchCategory === "headwears") {
+      setValue("hasSize", false);
+    } else{
+      setValue("hasSize", true);
+    }
+    console.log(watchCategory, "watchCategory",watch("hasSize"), "watchHasSize");
+  }, [watchCategory]);
   return (
     <section className="">
-      <div className="py-12 md:py-24 ">
-        <div className="max-w-4xl px-12 mx-auto">
+      <div className="">
+        <div className="max-w-4xl md:px-12 mx-auto">
           <div className="">
             <h3 className="text-3xl font-bold mb-10">Add New Product</h3>
           </div>
@@ -118,15 +140,6 @@ export default function Page() {
                 outerClassName="w-full"
                 placeholder="Enter product color e.g. red, blue, green"
                 errors={errors.color?.message}
-              />
-              <CustomInput
-                type="text"
-                label="Product Quantity"
-                name="quantity"
-                register={register}
-                outerClassName="w-full"
-                placeholder="Enter product quantity e.g. 100"
-                errors={errors.quantity?.message}
               />
             </div>
             <CustomInput
@@ -185,15 +198,17 @@ export default function Page() {
                   </p>
                 )}
               </div>
-              <CustomInput
-                type="text"
-                label="Product Sizes"
-                name="sizes"
-                register={register}
-                outerClassName="w-full"
-                placeholder="Enter product sizes , if multiple separate by comma e.g. S, M, L"
-                errors={errors.sizes?.message}
-              />
+              {watchCategory !== "headwears" && (
+                <CustomInput
+                  type="text"
+                  label="Product Sizes"
+                  name="sizes"
+                  register={register}
+                  outerClassName="w-full"
+                  placeholder="Enter product sizes , if multiple separate by comma e.g. S, M, L"
+                  errors={errors.sizes?.message}
+                />
+              )}
             </div>
             <FileUploader
               label="Product Images"

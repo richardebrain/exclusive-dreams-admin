@@ -35,18 +35,18 @@ const Page = () => {
     const res = await signInAdminWithEmail(data.email, data.password);
     if (res?.uid) {
       dispatch(setAdmin(res));
-      router.push("/dashboard");
+      router.push("/");
     }
     console.log(res, "response");
   };
   useEffect(() => {
     if (admin) {
-      router.push("/dashboard");
+      router.push("/");
     }
   }, []);
   useEffect(() => {
     if (admin) {
-      router.push("/dashboard");
+      router.push("/");
     }
   }, [admin]);
 
