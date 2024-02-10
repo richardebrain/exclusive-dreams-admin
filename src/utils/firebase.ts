@@ -219,7 +219,6 @@ export const getAllOrders = async () => {
       userId,
     };
   }) as OrderType[];
-  console.log(ordersList, "ordersList");
   return ordersList;
 };
 

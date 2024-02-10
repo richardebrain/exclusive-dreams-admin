@@ -27,8 +27,6 @@ export default function Page() {
       setOrders(data);
     }
   }, [data]);
-  console.log(orders, "orders");
-
   const [showPrompt, setShowPrompt] = useState(false);
   const [pickedStatus, setPickedStatus] = useState<
     "processing" | "shipped" | "delivered" | "cancelled" | "order placed"
@@ -124,7 +122,6 @@ export default function Page() {
   useEffect(() => {
     setFilteredOrders(currentItems);
   }, [currentItemsLength]);
-  console.log(filteredOrders, "filteredOrders");
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
   return (
