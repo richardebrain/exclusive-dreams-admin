@@ -1,12 +1,15 @@
+import { OrderType } from "@/utils/type";
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { orderByKey } from "firebase/database";
 import { Fragment } from "react";
 
 const statusOptions = [
+  { name: "Order Placed", value: "order placed" },
   { name: "Pending", value: "pending" },
+  { name: "Shipped", value: "shipped" },
+  { name: "Delivered", value: "delivered" },
   { name: "Cancelled", value: "cancelled" },
-  { name: "Refunded", value: "refunded" },
 ];
 
 export const StatusDropDown = ({
@@ -14,9 +17,14 @@ export const StatusDropDown = ({
   setText,
   setShowPrompt,
   setPickedStatus,
-}: any) => {
+}: {
+  order: OrderType;
+  setText: any;
+  setShowPrompt: any;
+  setPickedStatus: any;
+}) => {
   const handleClick = ({ status }: any) => {
-    if (order?.orderStatus === status) {
+    if (order?.deliveryStatus === status) {
       return;
     }
     setShowPrompt(true);
@@ -35,9 +43,17 @@ export const StatusDropDown = ({
                 group inline-flex items-center rounded-md  px-3 py-2 text-sm font-bold border border-[rgba(145,158,171,0.32)] transition duration-200 ease-out hover:bg-[rgba(145,158,171,0.08)] hover:border-[#000000]`}
             >
               <p className="capitalize">
-                {order?.orderStatus === "cancelled" && <span>Cancelled</span>}
-                {order?.orderStatus === "pending" && <span>Pending</span>}
-                {order?.orderStatus === "refunded" && <span>Refunded</span>}
+                {order?.deliveryStatus === "order placed" && (
+                  <span>Order Placed</span>
+                )}
+                {order?.deliveryStatus === "cancelled" && (
+                  <span>Cancelled</span>
+                )}
+                {order?.deliveryStatus === "pending" && <span>Pending</span>}
+                {order?.deliveryStatus === "shipped" && <span>Shipped</span>}
+                {order?.deliveryStatus === "delivered" && (
+                  <span>Delivered</span>
+                )}
               </p>
               <ChevronDownIcon
                 className={`${open ? "" : ""}
@@ -70,7 +86,7 @@ export const StatusDropDown = ({
                           handleClick({ status: item.value });
                         }}
                         className={`-m3 flex items-center rounded-md p-2 transition duration-150 ease-in-out hover:bg-gray-100 ${
-                          order?.orderStatus === item.value
+                          order?.deliveryStatus === item.value
                             ? "bg-[rgba(145,158,171,0.16)] font-bold"
                             : ""
                         }`}

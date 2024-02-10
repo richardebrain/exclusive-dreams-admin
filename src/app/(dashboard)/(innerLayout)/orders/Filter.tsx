@@ -68,6 +68,7 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
       deliveryStatus: "",
       sort: "",
     });
+    setOrders(orders);
   };
   const filterByDeliveryStatus = (status: string) => {
     const newOrders = orders.filter((order) => order.deliveryStatus === status);

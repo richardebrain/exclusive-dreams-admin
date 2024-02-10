@@ -2,10 +2,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { OrderType } from "@/utils/type";
+import { OrderType, ProductCheckoutType } from "@/utils/type";
 import { StatusDropDown } from "@/components/orders/StatusDropdown";
 import Filter from "./Filter";
 import Paginate from "./Paginate";
+import Modal from "./Modal";
 
 export default function Page() {
   let [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,26 @@ export default function Page() {
   const [pickedStatus, setPickedStatus] = useState<any>("");
   const [text, setText] = useState("");
   const [filteredOrders, setFilteredOrders] = useState<OrderType[]>([]);
+  const [selected, setSelected] = useState<{
+    product: ProductCheckoutType;
+    orderId: string;
+    hasSize: boolean;
+  }>({
+    orderId: "",
+    product: {
+      category: "",
+      color: "",
+      hasSize: false,
+      imageUrl: "",
+      price: "",
+      productTitle: "",
+      productId: "",
+      size: "",
+      quantity: 0,
+    },
+    hasSize: false,
+  });
+
   const title = "Are you sure";
 
   useEffect(() => {
@@ -52,13 +73,14 @@ export default function Page() {
     }
   }, [showPrompt]);
 
+  const sortedOrders = orders.sort((a, b) => b.createdAt - a.createdAt);
   const itemsPerPage = 10;
   const endOffset = offset + itemsPerPage;
-  const pageCount = Math.ceil(orders.length / itemsPerPage);
-  const currentItems = orders.slice(offset, endOffset);
+  const pageCount = Math.ceil(sortedOrders.length / itemsPerPage);
+  const currentItems = sortedOrders.slice(offset, endOffset);
   const handleNext = (event: { selected: number }) => {
     const selectedPage = event.selected;
-    const newOffset = (selectedPage * itemsPerPage) % orders.length;
+    const newOffset = (selectedPage * itemsPerPage) % sortedOrders.length;
     setOffset(newOffset);
   };
   const currentItemsLength = currentItems.length;
@@ -149,7 +171,14 @@ export default function Page() {
                           <td className="whitespace-nowrap py-6 text-right font-medium">
                             <button
                               type="button"
-                              onClick={() => setIsOpen(true)}
+                              onClick={() => {
+                                setIsOpen(true),
+                                  setSelected({
+                                    product: product,
+                                    orderId: order.orderId,
+                                    hasSize: product.hasSize,
+                                  });
+                              }}
                               className="text-indigo-600"
                             >
                               View
@@ -196,7 +225,14 @@ export default function Page() {
                           <td className="whitespace-nowrap py-6 text-right font-medium">
                             <button
                               type="button"
-                              onClick={() => setIsOpen(true)}
+                              onClick={() => {
+                                setIsOpen(true),
+                                  setSelected({
+                                    product: product,
+                                    orderId: order.orderId,
+                                    hasSize: product.hasSize,
+                                  });
+                              }}
                               className="text-indigo-600"
                             >
                               View
@@ -216,83 +252,15 @@ export default function Page() {
           ))}
         </div>
       </div>
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black/25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md h-96  transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all overflow-hidden overflow-y-auto">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Product Information
-                  </Dialog.Title>
-                  <div className="mt-2 flex flex-col gap-2">
-                    <div className="my-4">
-                      <StatusDropDown
-                        order={orders[0]}
-                        setText={setText}
-                        setShowPrompt={setShowPrompt}
-                        setPickedStatus={setPickedStatus}
-                      />
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      <span className="font-semibold">Product Title:</span>{" "}
-                      T-Shirt
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      <span className="font-semibold">Product Brand:</span>{" "}
-                      Exclusive Dream
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      <span className="font-semibold">Product Price:</span>{" "}
-                      $1000
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      <span className="font-semibold">Product Quantity:</span> 1
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      <span className="font-semibold">Product Size:</span> M
-                    </p>
-                  </div>
-                  {/* change staus */}
-
-                  <div className="mt-4 place-self-end flex items-end justify-end h-20">
-                    <button
-                      type="button"
-                      className="h-max inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+      <Modal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        selected={selected}
+        setShowPrompt={setShowPrompt}
+        setText={setText}
+        setPickedStatus={setPickedStatus}
+        orders={orders}
+      />
       <div className="flex justify-between items-center">
         <p>
           Showing {offset + 1} to {endOffset} of {orders.length} Orders

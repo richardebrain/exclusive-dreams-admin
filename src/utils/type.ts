@@ -43,8 +43,7 @@ export type UploadProductType = {
   category: string;
   imageUrl: string[];
   href: string;
-  
-}
+};
 
 export interface OrderItemType {
   productTitle: string;
@@ -56,7 +55,6 @@ export interface OrderItemType {
   category: string;
   imageUrl: string[];
   href: string;
-  
 }
 
 export type ProductCheckoutType = {
@@ -76,6 +74,7 @@ export interface OrderType {
   amount: number;
   cart: ProductCheckoutType[];
   deliveryFee: number;
+  email: string;
   shipping: {
     address: {
       city: string;
@@ -100,7 +99,12 @@ export interface OrderType {
     | "requires_capture"
     | "canceled"
     | "succeeded";
-    deliveryStatus: "pending" | "shipped" | "delivered"|"cancelled"|"order placed";
-    userId: string;
-    createdAt: number;
-} 
+  deliveryStatus:
+    | "pending"
+    | "shipped"
+    | "delivered"
+    | "cancelled"
+    | "order placed";
+  userId: string;
+  createdAt: number;
+}
