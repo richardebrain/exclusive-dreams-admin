@@ -97,8 +97,8 @@ export interface OrderType {
     | "requires_action"
     | "processing"
     | "requires_capture"
-    | "canceled"
-    | "succeeded";
+    | "cancelled"
+    | "succeeded"|"refunded";
   deliveryStatus:
     | "processing"
     | "shipped"

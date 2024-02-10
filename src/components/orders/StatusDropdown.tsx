@@ -41,6 +41,9 @@ export const StatusDropDown = ({
               className={`
                 ${open ? "" : ""}
                 group inline-flex items-center rounded-md  px-3 py-2 text-sm font-bold border border-[rgba(145,158,171,0.32)] transition duration-200 ease-out hover:bg-[rgba(145,158,171,0.08)] hover:border-[#000000]`}
+              disabled={
+                order.status === "refunded" || order.status === "cancelled"
+              }
             >
               <p className="capitalize">
                 {order?.deliveryStatus === "order placed" && (
@@ -49,7 +52,9 @@ export const StatusDropDown = ({
                 {order?.deliveryStatus === "cancelled" && (
                   <span>Cancelled</span>
                 )}
-                {order?.deliveryStatus === "processing" && <span>Processing</span>}
+                {order?.deliveryStatus === "processing" && (
+                  <span>Processing</span>
+                )}
                 {order?.deliveryStatus === "shipped" && <span>Shipped</span>}
                 {order?.deliveryStatus === "delivered" && (
                   <span>Delivered</span>
@@ -81,6 +86,10 @@ export const StatusDropDown = ({
                   <div className="relative grid gap-1 bg-white p-1 bg-gradient-to-bl from-purple-50 via-white to-green-50 transform transition-transform duration-500 ease-out">
                     {deliveryStatusOption.map((item) => (
                       <button
+                        disabled={
+                          order.status === "refunded" ||
+                          order.status === "cancelled"
+                        }
                         key={item.value}
                         onClick={() => {
                           handleClick({ status: item.value });

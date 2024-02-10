@@ -13,7 +13,7 @@ const sortOptions = [
 ];
 const paymentOptions = [
   { value: "succeeded", label: "Succeeded" },
-  { value: "refund", label: "Refund" },
+  { value: "refunded", label: "Refunded" },
 ];
 
 const deliveryOptions = [
