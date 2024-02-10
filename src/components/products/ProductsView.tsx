@@ -20,7 +20,7 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
             />
             <div className="flex flex-col gap-2">
               <h3 className="text-lg font-bold">{product.productTitle}</h3>
-              <span className="text-sm font-semibold">{product.price}</span>
+              <span className="text-sm font-semibold">${product.price}</span>
             </div>
           </div>
         ))}

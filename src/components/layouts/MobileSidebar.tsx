@@ -3,6 +3,7 @@ import { Transition, Dialog } from "@headlessui/react";
 import React, { Fragment, useState } from "react";
 import { navigation, uis } from "@/utils/navigations";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -81,7 +82,7 @@ const MobileSidebar = () => {
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item) => (
                             <li key={item.name}>
-                              <a
+                              <Link
                                 href={item.href}
                                 className={classNames(
                                   item.current
@@ -95,7 +96,7 @@ const MobileSidebar = () => {
                                   aria-hidden="true"
                                 />
                                 {item.name}
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>
@@ -107,7 +108,7 @@ const MobileSidebar = () => {
                         <ul role="list" className="-mx-2 mt-2 space-y-1">
                           {uis.map((ui) => (
                             <li key={ui.name}>
-                              <a
+                              <Link
                                 href={ui.href}
                                 className={classNames(
                                   ui.current
@@ -120,7 +121,7 @@ const MobileSidebar = () => {
                                   {ui.initial}
                                 </span>
                                 <span className="truncate">{ui.name}</span>
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>

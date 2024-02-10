@@ -28,6 +28,7 @@ import {
 import {
   AddProductForm,
   AdminType,
+  OrderType,
   RegisterAdminForm,
   UploadProductType,
 } from "./type";
@@ -217,7 +218,8 @@ export const getAllOrders = async () => {
       ...doc.data(),
       userId,
     };
-  });
+  }) as OrderType[];
+  console.log(ordersList, "ordersList");
   return ordersList;
 };
 
