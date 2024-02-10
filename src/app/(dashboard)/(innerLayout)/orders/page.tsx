@@ -177,7 +177,7 @@ export default function Page() {
                 </thead>
                 <tbody className="divide-y divide-gray-200 border-b border-gray-200 text-sm sm:border-t">
                   {order.cart.map((product) => {
-                    if (product.hasSize) {
+                    if (product.hasSize || product.size !== "") {
                       return (
                         <tr key={product.productId + product.size}>
                           <td className="py-6 pr-8">
@@ -234,7 +234,7 @@ export default function Page() {
                       );
                     } else {
                       return (
-                        <tr key={product.productId + product.size}>
+                        <tr key={product.productId}>
                           <td className="py-6 pr-8">
                             <div className="flex items-center">
                               <img
