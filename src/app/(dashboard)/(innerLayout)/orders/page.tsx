@@ -20,7 +20,8 @@ export default function Page() {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, error, isLoading } = useSwr<OrderType[]>(
     "/api/getAllOrders",
-    fetcher
+    fetcher,
+    { revalidateOnMount: true }
   );
   useEffect(() => {
     if (data) {
