@@ -22,13 +22,12 @@ export default function Page() {
     "/api/getAllOrders",
     fetcher
   );
-  console.log(data, "data");
-
   useEffect(() => {
     if (data) {
       setOrders(data);
     }
   }, [data]);
+  console.log(orders, "orders");
 
   const [showPrompt, setShowPrompt] = useState(false);
   const [pickedStatus, setPickedStatus] = useState<
@@ -36,7 +35,6 @@ export default function Page() {
   >("order placed");
   const [text, setText] = useState("");
   const [filteredOrders, setFilteredOrders] = useState<OrderType[]>([]);
-  const [orderToChangeId, setOrderToChangeId] = useState<string>("");
   const [selected, setSelected] = useState<{
     product: ProductCheckoutType;
     orderId: string;

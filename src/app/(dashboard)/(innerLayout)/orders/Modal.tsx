@@ -116,13 +116,12 @@ const Modal = ({
                     <span className="font-semibold">Product Quantity:</span>{" "}
                     {product?.quantity}
                   </p>
-                  {product.hasSize ||
-                    (product.size !== "" && (
-                      <p className="text-sm text-gray-500">
-                        <span className="font-semibold">Product Size:</span>{" "}
-                        {product?.size}
-                      </p>
-                    ))}
+                  {product.hasSize && (
+                    <p className="text-sm text-gray-500">
+                      <span className="font-semibold capitalize" >Product Size:</span>{" "}
+                      {product?.size}
+                    </p>
+                  )}
                   <p className="text-sm text-gray-500">
                     <span className="font-semibold">Date Placed:</span>{" "}
                     {convertUnix(orderItself?.createdAt).formattedDate}
@@ -131,7 +130,7 @@ const Modal = ({
                     <span className="font-semibold">Payment:</span>{" "}
                     {orderItself.status === "succeeded"
                       ? "Payment Made"
-                      : "Not Paid"}
+                      : "Payment Refunded"}
                   </p>
                   <p className="text-sm text-gray-500">
                     <span className="font-semibold text-sm text-gray-500">

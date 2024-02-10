@@ -213,7 +213,6 @@ export const getAllOrders = async () => {
   const orders = await getDocs(queries);
   const ordersList = orders.docs.map((doc) => {
     const userId = doc.ref.parent.parent?.id;
-    const { ...rest } = doc.data();
     return {
       ...doc.data(),
       userId,
