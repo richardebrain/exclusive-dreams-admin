@@ -42,7 +42,7 @@ export const StatusDropDown = ({
                 ${open ? "" : ""}
                 group inline-flex items-center rounded-md  px-3 py-2 text-sm font-bold border border-[rgba(145,158,171,0.32)] transition duration-200 ease-out hover:bg-[rgba(145,158,171,0.08)] hover:border-[#000000]`}
               disabled={
-                order.status === "refunded" || order.status === "cancelled"
+                order.status === "refunded" || order.deliveryStatus === "cancelled"
               }
             >
               <p className="capitalize">
@@ -88,7 +88,7 @@ export const StatusDropDown = ({
                       <button
                         disabled={
                           order.status === "refunded" ||
-                          order.status === "cancelled"
+                          order.deliveryStatus === "cancelled"
                         }
                         key={item.value}
                         onClick={() => {
