@@ -100,7 +100,7 @@ export interface OrderType {
     | "canceled"
     | "succeeded";
   deliveryStatus:
-    | "pending"
+    | "processing"
     | "shipped"
     | "delivered"
     | "cancelled"

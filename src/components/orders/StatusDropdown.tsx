@@ -4,9 +4,9 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { orderByKey } from "firebase/database";
 import { Fragment } from "react";
 
-const statusOptions = [
+const deliveryStatusOption = [
   { name: "Order Placed", value: "order placed" },
-  { name: "Pending", value: "pending" },
+  { name: "Processing", value: "processing" },
   { name: "Shipped", value: "shipped" },
   { name: "Delivered", value: "delivered" },
   { name: "Cancelled", value: "cancelled" },
@@ -23,7 +23,7 @@ export const StatusDropDown = ({
   setShowPrompt: any;
   setPickedStatus: any;
 }) => {
-  const handleClick = ({ status }: any) => {
+  const handleClick = ({ status }: { status: string }) => {
     if (order?.deliveryStatus === status) {
       return;
     }
@@ -49,7 +49,7 @@ export const StatusDropDown = ({
                 {order?.deliveryStatus === "cancelled" && (
                   <span>Cancelled</span>
                 )}
-                {order?.deliveryStatus === "pending" && <span>Pending</span>}
+                {order?.deliveryStatus === "processing" && <span>Processing</span>}
                 {order?.deliveryStatus === "shipped" && <span>Shipped</span>}
                 {order?.deliveryStatus === "delivered" && (
                   <span>Delivered</span>
@@ -79,7 +79,7 @@ export const StatusDropDown = ({
                   }}
                 >
                   <div className="relative grid gap-1 bg-white p-1 bg-gradient-to-bl from-purple-50 via-white to-green-50 transform transition-transform duration-500 ease-out">
-                    {statusOptions.map((item) => (
+                    {deliveryStatusOption.map((item) => (
                       <button
                         key={item.value}
                         onClick={() => {

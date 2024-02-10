@@ -7,6 +7,8 @@ import { StatusDropDown } from "@/components/orders/StatusDropdown";
 import Filter from "./Filter";
 import Paginate from "./Paginate";
 import Modal from "./Modal";
+import useSwr from "swr";
+import { updateOrderStatus } from "@/utils/firebase";
 
 export default function Page() {
   let [isOpen, setIsOpen] = useState(false);
@@ -15,23 +17,29 @@ export default function Page() {
   function closeModal() {
     setIsOpen(false);
   }
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  const { data, error, isLoading } = useSwr<OrderType[]>(
+    "/api/getAllOrders",
+    fetcher
+  );
+  console.log(data, "data");
 
   useEffect(() => {
-    (async () => {
-      const orders = await fetch("/api/getAllOrders");
-      const data = await orders.json();
+    if (data) {
       setOrders(data);
-    })();
-  }, []);
+    }
+  }, [data]);
 
   const [showPrompt, setShowPrompt] = useState(false);
-  const [pickedStatus, setPickedStatus] = useState<any>("");
+  const [pickedStatus, setPickedStatus] = useState<"processing" | "shipped" | "delivered" | "cancelled" | "order placed">("order placed");
   const [text, setText] = useState("");
   const [filteredOrders, setFilteredOrders] = useState<OrderType[]>([]);
+  const [orderToChangeId, setOrderToChangeId] = useState<string>("");
   const [selected, setSelected] = useState<{
     product: ProductCheckoutType;
     orderId: string;
     hasSize: boolean;
+    userId: string;
   }>({
     orderId: "",
     product: {
@@ -46,9 +54,24 @@ export default function Page() {
       quantity: 0,
     },
     hasSize: false,
+    userId: "",
   });
 
   const title = "Are you sure";
+  const updateDb = async (
+    userId: string,
+    orderId: string,
+    deliveryStatus: string,
+    status?: string
+  ) => {
+    const result = await updateOrderStatus(
+      userId,
+      orderId,
+      deliveryStatus,
+      status
+    );
+    return result;
+  };
 
   useEffect(() => {
     if (showPrompt) {
@@ -56,14 +79,28 @@ export default function Page() {
       const result = window.confirm(`${title} ${text}`);
       if (result) {
         // change status here
-        const newOrders = orders.map((order) => {
-          if (order.orderId === orders[0].orderId) {
-            order.deliveryStatus = pickedStatus;
+        const newOrders = filteredOrders.map((order) => {
+          if (order.orderId === selected.orderId) {
+            try {
+              (async () => {
+                const update = await updateDb(
+                  selected.userId,
+                  selected.orderId,
+                  pickedStatus
+                );
+                if (update.success) {
+                  order.deliveryStatus = pickedStatus;
+                }
+              })();
+            } catch (error) {
+              console.log(error, "error updating order status");
+            }
           }
           return order;
         });
         // update orders
         console.log(newOrders);
+        setFilteredOrders(newOrders);
         alert(`Status changed to ${pickedStatus}`);
         setShowPrompt(false);
       } else {
@@ -88,6 +125,8 @@ export default function Page() {
     setFilteredOrders(currentItems);
   }, [currentItemsLength]);
   console.log(filteredOrders, "filteredOrders");
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
   return (
     <main className="flex flex-col gap-10 max-w-4xl mx-auto">
       {/* <h3 className="text-3xl font-bold">Orders</h3> */}
@@ -177,6 +216,7 @@ export default function Page() {
                                     product: product,
                                     orderId: order.orderId,
                                     hasSize: product.hasSize,
+                                    userId: order.userId,
                                   });
                               }}
                               className="text-indigo-600"
@@ -231,6 +271,7 @@ export default function Page() {
                                     product: product,
                                     orderId: order.orderId,
                                     hasSize: product.hasSize,
+                                    userId: order.userId,
                                   });
                               }}
                               className="text-indigo-600"

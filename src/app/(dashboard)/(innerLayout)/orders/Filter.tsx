@@ -17,7 +17,7 @@ const paymentOptions = [
 ];
 
 const deliveryOptions = [
-  { value: "pending", label: "Pending" },
+  { value: "processing", label: "Processing" },
   { value: "shipped", label: "Shipped" },
   { value: "delivered", label: "Delivered" },
   { value: "cancelled", label: "Cancelled" },

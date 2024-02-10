@@ -12,6 +12,7 @@ type ModalProps = {
     product: ProductCheckoutType;
     orderId: string;
     hasSize: boolean;
+    userId: string;
   };
   setText: React.Dispatch<React.SetStateAction<string>>;
   setShowPrompt: React.Dispatch<React.SetStateAction<boolean>>;
@@ -74,7 +75,7 @@ const Modal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md h-96  transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all overflow-hidden overflow-y-auto">
+              <Dialog.Panel className="w-full max-w-xl h-[500px]  transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all overflow-hidden overflow-y-auto">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
@@ -177,8 +178,8 @@ const Modal = ({
                           Order Delivered
                         </p>
                       )}
-                      {orderItself?.deliveryStatus === "pending" && (
-                        <p className="text-sm text-gray-500"> Order Pending</p>
+                      {orderItself?.deliveryStatus === "processing" && (
+                        <p className="text-sm text-gray-500"> Order Processing</p>
                       )}
                       {orderItself?.deliveryStatus === "cancelled" && (
                         <p className="text-sm text-gray-500">

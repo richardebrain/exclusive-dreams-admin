@@ -221,3 +221,31 @@ export const getAllOrders = async () => {
   });
   return ordersList;
 };
+
+export const updateOrderStatus = async (
+  userId: string,
+  orderId: string,
+  deliveryStatus: string,
+  status?: string
+) => {
+  const orderRef = doc(collection(db, "orders", userId, "orders"), orderId);
+  try {
+    if (status) {
+      await setDoc(orderRef, { status, deliveryStatus }, { merge: true });
+      toast.success("order status updated successfully");
+      return {
+        success: true,
+      };
+    }
+    await setDoc(orderRef, { deliveryStatus }, { merge: true });
+    toast.success("order status updated successfully");
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.log(error, "error updating order status");
+    return {
+      success: false,
+    };
+  }
+};
