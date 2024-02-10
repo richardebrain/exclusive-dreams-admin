@@ -31,7 +31,9 @@ export default function Page() {
   }, [data]);
 
   const [showPrompt, setShowPrompt] = useState(false);
-  const [pickedStatus, setPickedStatus] = useState<"processing" | "shipped" | "delivered" | "cancelled" | "order placed">("order placed");
+  const [pickedStatus, setPickedStatus] = useState<
+    "processing" | "shipped" | "delivered" | "cancelled" | "order placed"
+  >("order placed");
   const [text, setText] = useState("");
   const [filteredOrders, setFilteredOrders] = useState<OrderType[]>([]);
   const [orderToChangeId, setOrderToChangeId] = useState<string>("");
@@ -287,6 +289,30 @@ export default function Page() {
                       );
                     }
                   })}
+                  <tr className="py-4 h-10">
+                    <td colSpan={3}>Order Status:</td>
+                    {/* <td></td>
+                    <td></td>
+                    <td></td> */}
+                    <td colSpan={2} className="text-right">
+                      <span
+                        className={`"font-bold capitalize text-white px-2 shadow-md py-1.5 rounded-sm ${
+                          order.deliveryStatus === "shipped"
+                            ? " bg-green-400"
+                            : order.deliveryStatus === "order placed"
+                            ? "bg-blue-500"
+                            : order.deliveryStatus === "processing"
+                            ? "bg-yellow-500"
+                            : order.deliveryStatus === "cancelled"
+                            ? "bg-red-500"
+                            : order.deliveryStatus === "delivered" &&
+                              "bg-green-800"
+                        } `}
+                      >
+                        {order.deliveryStatus}
+                      </span>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>

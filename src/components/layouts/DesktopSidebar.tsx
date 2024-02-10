@@ -1,5 +1,5 @@
 "use client";
-import { navigation, teams } from "@/utils/navigations";
+import { navigation,  uis } from "@/utils/navigations";
 import Link from "next/link";
 import React from "react";
 import { Disclosure } from "@headlessui/react";
@@ -114,12 +114,12 @@ const DesktopSidebar = () => {
               </li>
               <li>
                 <div className="text-xs font-semibold leading-6 text-gray-400">
-                  Your teams
+                  Your Uis
                 </div>
                 <ul role="list" className="-mx-2 mt-2 space-y-1">
-                  {teams.map((team) => (
+                  {uis.map((team) => (
                     <li key={team.name}>
-                      <a
+                      <Link
                         href={team.href}
                         className={classNames(
                           team.current
@@ -132,7 +132,7 @@ const DesktopSidebar = () => {
                           {team.initial}
                         </span>
                         <span className="truncate">{team.name}</span>
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
