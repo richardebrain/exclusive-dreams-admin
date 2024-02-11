@@ -9,15 +9,23 @@ import Paginate from "./Paginate";
 import Modal from "./Modal";
 import useSwr from "swr";
 import { updateOrderStatus } from "@/utils/firebase";
+import { fetcher } from "@/hooks/fetcher";
+import { useParams, useSearchParams } from "next/navigation";
 
 export default function Page() {
   let [isOpen, setIsOpen] = useState(false);
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [offset, setOffset] = useState(0);
+  const [search, setSearch] = useState("");
+  const params = useSearchParams();
+  const isOrderId = params.has("orderId");
+  console.log(search, "search");
+  useEffect(() => {
+    setSearch(params.get("orderId") || "");
+  }, [isOrderId]);
   function closeModal() {
     setIsOpen(false);
   }
-  const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, error, isLoading, mutate } = useSwr<OrderType[]>(
     "/api/getAllOrders",
     fetcher,
@@ -131,6 +139,16 @@ export default function Page() {
       {/* <h3 className="text-3xl font-bold">Orders</h3> */}
       <div>
         <Filter orders={currentItems} setOrders={setFilteredOrders} />
+        <div>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by Order ID"
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+          
+        </div>
         <div className="space-y-20">
           {filteredOrders.map((order) => (
             <div key={order.orderId}>

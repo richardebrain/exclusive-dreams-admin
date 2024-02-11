@@ -31,6 +31,7 @@ import {
   OrderType,
   RegisterAdminForm,
   UploadProductType,
+  User,
 } from "./type";
 import { toast } from "react-toastify";
 
@@ -47,7 +48,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 const db = getFirestore();
 const adminsCollection = collection(db, "admins");
-
+const userDbCollection = collection(db, "users");
 export const createBasicAdminWithEmail = async (data: RegisterAdminForm) => {
   const admin = await createUserWithEmailAndPassword(
     auth,
@@ -248,4 +249,39 @@ export const updateOrderStatus = async (
       success: false,
     };
   }
+};
+
+export const getAllUsersDb = async () => {
+  const users = await getDocs(userDbCollection);
+  const usersList = users.docs.map((doc) => {
+    const { createdAt, ...rest } = doc.data();
+
+    return {
+      ...rest,
+    };
+  }) as User[]
+  return usersList;
+
+}
+export const getUserFromDb = async (uid: string) => {
+  const userRef = doc(userDbCollection, uid);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) {
+    const { createdAt, ...rest } = userSnap.data();
+    return {
+      ...rest,
+    };
+  } else {
+    return;
+  }
+}
+export const getUserOrderFromDb = async (uid: string) => {
+  const userOrdersRef = collection(db, "orders", uid, "orders");
+  const userOrders = await getDocs(userOrdersRef);
+  const userOrdersList = userOrders.docs.map((doc) => {
+    return {
+      ...doc.data(),
+    };
+  }) as OrderType[];
+  return userOrdersList;
 };
