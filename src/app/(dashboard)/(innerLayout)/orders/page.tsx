@@ -18,7 +18,7 @@ export default function Page() {
     setIsOpen(false);
   }
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
-  const { data, error, isLoading } = useSwr<OrderType[]>(
+  const { data, error, isLoading, mutate } = useSwr<OrderType[]>(
     "/api/getAllOrders",
     fetcher,
     { revalidateOnMount: true }
@@ -89,6 +89,7 @@ export default function Page() {
                 );
                 if (update.success) {
                   order.deliveryStatus = pickedStatus;
+                  mutate();
                 }
               })();
             } catch (error) {
