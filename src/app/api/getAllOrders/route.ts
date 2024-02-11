@@ -1,7 +1,9 @@
 import { getAllOrders } from "@/utils/firebase";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const req = await request.json();
+  const req =  request.url
+  console.log(req, "req")
   const orders = await getAllOrders();
-  return Response.json(orders, { status: 200 });
+  return NextResponse.json(orders);
 }
