@@ -15,6 +15,7 @@ import {
   addDoc,
   collection,
   collectionGroup,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -242,6 +243,13 @@ export const getSingleProduct = async (productId: string) => {
     return;
   }
 };
+export const deleteProductFromDb= async (productId:string)=>{
+  const productRef = doc(storeCollections,productId)
+  const productSnap = await getDoc(productRef)
+  if(productSnap.exists()){
+    await deleteDoc(productRef)
+  }
+}
 
 const ordersCollections = collection(db, "orders");
 export const getAllOrders = async () => {

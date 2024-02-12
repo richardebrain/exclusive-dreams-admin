@@ -40,10 +40,10 @@ const schema = yup.object().shape({
   imageUrl: yup
     .mixed<FileList>()
     .test("filesize", "File Size is too large", (value) => {
-      return fileSizeTest(value as FileList, 3,true);
+      return fileSizeTest(value as FileList, 3, true);
     })
     .test("fileFormat", "Unsupported Format", (value) => {
-      return fileExtensionTest(value as FileList, ["jpg", "jpeg", "png"],true);
+      return fileExtensionTest(value as FileList, ["jpg", "jpeg", "png"], true);
     })
     .test("required", "Product Image is required", (value: any) => {
       if (!value || value === undefined || value.length <= 0) return false;
@@ -96,10 +96,15 @@ export default function Page() {
   useEffect(() => {
     if (watchCategory === "headwears") {
       setValue("hasSize", false);
-    } else{
+    } else {
       setValue("hasSize", true);
     }
-    console.log(watchCategory, "watchCategory",watch("hasSize"), "watchHasSize");
+    console.log(
+      watchCategory,
+      "watchCategory",
+      watch("hasSize"),
+      "watchHasSize"
+    );
   }, [watchCategory]);
   return (
     <section className="">
@@ -211,12 +216,29 @@ export default function Page() {
                 />
               )}
             </div>
-            <FileUploader
-              label="Product Images"
-              {...register("imageUrl")}
-              multiple
-              errors={errors?.imageUrl?.message!}
-            />
+            <div className="flex w-full gap-6 items-center">
+              <FileUploader
+                label="Product Images"
+                {...register("imageUrl")}
+                multiple
+                errors={errors?.imageUrl?.message!}
+              />
+              <div className="checkbox flex flex-col">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox"
+                    {...register("isFinishedInStore")}
+                  />
+                  <span className="ml-2">Is Product Finished in Store ?</span>
+                </label>
+                {errors.isFinishedInStore && (
+                  <p className="tetx-red-500 text-sm">
+                    {errors.isFinishedInStore.message}
+                  </p>
+                )}
+              </div>
+            </div>
             <CustomButton type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <Spinner className="w-5 h-5 animate-spin fill-white mx-auto" />

@@ -57,7 +57,8 @@ const schema = yup.object().shape({
         ["jpg", "jpeg", "png"],
         false
       );
-    }).defined("Product Image is required"),
+    })
+    .defined("Product Image is required"),
   // .test("required", "Product Image is required", (value: any) => {
   //   if (!value || value === undefined || value.length <= 0) return false;
   //   return true;
@@ -259,6 +260,11 @@ export default function Page({ params }: { params: { slug: string } }) {
                     />
                     <span className="ml-2">Is Product Finished in Store ?</span>
                   </label>
+                  {errors.isFinishedInStore && (
+                    <p className="tetx-red-500 text-sm">
+                      {errors.isFinishedInStore.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <div>
