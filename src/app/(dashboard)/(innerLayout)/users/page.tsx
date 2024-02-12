@@ -179,6 +179,7 @@ const UsersPage = () => {
                                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
                                             <Link
                                               href={`/orders?orderId=${order.orderId}`}
+                                              className="text-blue-600 underline"
                                             >
                                               {order.orderId}
                                             </Link>

@@ -40,10 +40,10 @@ const schema = yup.object().shape({
   imageUrl: yup
     .mixed<FileList>()
     .test("filesize", "File Size is too large", (value) => {
-      return fileSizeTest(value as FileList, 3);
+      return fileSizeTest(value as FileList, 3,true);
     })
     .test("fileFormat", "Unsupported Format", (value) => {
-      return fileExtensionTest(value as FileList, ["jpg", "jpeg", "png"]);
+      return fileExtensionTest(value as FileList, ["jpg", "jpeg", "png"],true);
     })
     .test("required", "Product Image is required", (value: any) => {
       if (!value || value === undefined || value.length <= 0) return false;
@@ -51,6 +51,7 @@ const schema = yup.object().shape({
     })
     .defined("Product Image is required"),
   hasSize: yup.boolean().required(),
+  isFinishedInStore: yup.boolean().required(),
 });
 
 const categories = [

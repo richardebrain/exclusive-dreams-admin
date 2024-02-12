@@ -19,10 +19,7 @@ export default function Page() {
   const [search, setSearch] = useState("");
   const params = useSearchParams();
   const isOrderId = params.has("orderId");
-  console.log(search, "search");
-  useEffect(() => {
-    setSearch(params.get("orderId") || "");
-  }, [isOrderId]);
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -125,6 +122,8 @@ export default function Page() {
   const currentItems = sortedOrders.slice(offset, endOffset);
   const handleNext = (event: { selected: number }) => {
     const selectedPage = event.selected;
+    setSearch("");
+    const newParams = new URLSearchParams(params.toString());
     const newOffset = (selectedPage * itemsPerPage) % sortedOrders.length;
     setOffset(newOffset);
   };
@@ -132,8 +131,24 @@ export default function Page() {
   useEffect(() => {
     setFilteredOrders(currentItems);
   }, [currentItemsLength]);
+
+  useEffect(() => {
+    const searchId = params.get("orderId") || "";
+    setSearch(searchId);
+  }, [isOrderId]);
+  useEffect(() => {
+    const filtered = orders.filter((order) => {
+      return (
+        order.orderId.toLowerCase().includes(search.toLowerCase()) ||
+        (order.email &&
+          order.email.toLowerCase().includes(search.toLowerCase()))
+      );
+    });
+    setFilteredOrders(filtered);
+  }, [currentItemsLength, search]);
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
+
   return (
     <main className="flex flex-col gap-10 max-w-4xl mx-auto">
       {/* <h3 className="text-3xl font-bold">Orders</h3> */}
@@ -144,10 +159,9 @@ export default function Page() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by Order ID"
+            placeholder="Search by Order No or email"
             className="w-full p-2 border border-gray-300 rounded-md"
           />
-          
         </div>
         <div className="space-y-20">
           {filteredOrders.map((order) => (

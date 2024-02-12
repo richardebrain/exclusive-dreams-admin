@@ -1,6 +1,12 @@
-export const fileSizeTest = (value: FileList | File, maxSize: number) => {
+export const fileSizeTest = (
+  value: FileList | File,
+  maxSize: number,
+  required: boolean
+) => {
   let totalSize = 0;
-  if (value instanceof File) {
+  if (!required) {
+    return true;
+  } else if (value instanceof File) {
     totalSize += value.size;
   } else {
     for (let i = 0; i < value.length; i++) {
@@ -15,10 +21,13 @@ export const fileSizeTest = (value: FileList | File, maxSize: number) => {
 
 export const fileExtensionTest = (
   value: FileList | File,
-  extensions: string[]
+  extensions: string[],
+  required: boolean
 ) => {
-  if (value instanceof File) {
-    console.log(value instanceof File)
+  if (!required) {
+    return true;
+  } else if (value instanceof File) {
+    console.log(value instanceof File);
     const extension = value.type.split("/")[1];
     if (!extension) return false;
     if (!extensions.includes(extension.toLowerCase())) {

@@ -23,6 +23,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import {
@@ -198,6 +199,27 @@ export const addProductToStore = async (
   }
 };
 
+export const updateProductInStore = async (
+  productId: string,
+  data: Omit<
+    UploadProductType,
+    "href" | "productId" | "imageUrl" | "productBrand"
+  >
+) => {
+  const productRef = doc(storeCollections, productId);
+  console.log(data, "data in store")
+  try {
+    await updateDoc(productRef, {
+      ...data,
+      updatedAt: new Date().toLocaleDateString(),
+    });
+    toast.success("product updated successfully");
+    return;
+  } catch (error) {
+    console.log(error, "error updating product in store");
+    return;
+  }
+};
 export const getAllProducts = async () => {
   const products = await getDocs(storeCollections);
   const productsList = products.docs.map((doc) => {
@@ -207,6 +229,18 @@ export const getAllProducts = async () => {
     };
   });
   return productsList;
+};
+export const getSingleProduct = async (productId: string) => {
+  const productRef = doc(storeCollections, productId);
+  const productSnap = await getDoc(productRef);
+  if (productSnap.exists()) {
+    const { createdAt, ...rest } = productSnap.data();
+    return {
+      ...(rest as UploadProductType),
+    };
+  } else {
+    return;
+  }
 };
 
 const ordersCollections = collection(db, "orders");
@@ -259,10 +293,9 @@ export const getAllUsersDb = async () => {
     return {
       ...rest,
     };
-  }) as User[]
+  }) as User[];
   return usersList;
-
-}
+};
 export const getUserFromDb = async (uid: string) => {
   const userRef = doc(userDbCollection, uid);
   const userSnap = await getDoc(userRef);
@@ -274,7 +307,7 @@ export const getUserFromDb = async (uid: string) => {
   } else {
     return;
   }
-}
+};
 export const getUserOrderFromDb = async (uid: string) => {
   const userOrdersRef = collection(db, "orders", uid, "orders");
   const userOrders = await getDocs(userOrdersRef);

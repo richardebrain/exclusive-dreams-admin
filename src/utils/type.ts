@@ -9,7 +9,20 @@ export interface AddProductForm {
   category: string;
   hasSize: boolean;
   imageUrl: FileList;
+  isFinishedInStore: boolean;
   // href: string;  set when submitting product
+}
+export interface UpdateProductForm {
+  // make all optional
+  productTitle?: string;
+  highlights?: string;
+  color?: string;
+  sizes?: string;
+  price?: string;
+  category?: string;
+  hasSize?: boolean;
+  imageUrl?: FileList;
+  isFinishedInStore?: boolean;
 }
 
 export type RegisterAdminForm = {
@@ -43,6 +56,7 @@ export type UploadProductType = {
   category: string;
   imageUrl: string[];
   href: string;
+  isFinishedInStore: boolean;
 };
 
 export interface OrderItemType {
@@ -98,7 +112,8 @@ export interface OrderType {
     | "processing"
     | "requires_capture"
     | "cancelled"
-    | "succeeded"|"refunded";
+    | "succeeded"
+    | "refunded";
   deliveryStatus:
     | "processing"
     | "shipped"
@@ -109,9 +124,9 @@ export interface OrderType {
   createdAt: number;
 }
 
-export type User={
+export type User = {
   email: string;
   firstName: string;
   lastName: string;
   uid: string;
-}
+};
