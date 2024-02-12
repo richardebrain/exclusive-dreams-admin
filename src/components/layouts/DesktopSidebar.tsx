@@ -1,12 +1,14 @@
 "use client";
-import { navigation,  uis } from "@/utils/navigations";
+import { navigation, uis } from "@/utils/navigations";
 import Link from "next/link";
 import React from "react";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@redux/type";
 import Image from "next/image";
+import { auth } from "@/utils/firebase";
+import { toast } from "react-toastify";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -14,6 +16,16 @@ function classNames(...classes: string[]) {
 const DesktopSidebar = () => {
   const pathname = usePathname();
   const { admin } = useAppSelector((state) => state.admin);
+  const router = useRouter();
+  const logOut = async () => {
+    try {
+      await auth.signOut();
+      toast.success("Logged out successfully");
+      router.push("/login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div>
       {" "}
@@ -138,11 +150,8 @@ const DesktopSidebar = () => {
                 </ul>
               </li>
               {admin && admin.uid ? (
-                <li className="-mx-6 mt-auto">
-                  <a
-                    href="#"
-                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
-                  >
+                <li className="-mx-6 mt-auto flex">
+                  <button className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800">
                     <Image
                       className="h-8 w-8 rounded-full bg-gray-800"
                       src="/user-logo.png"
@@ -152,7 +161,14 @@ const DesktopSidebar = () => {
                     />
                     <span className="sr-only">Your profile</span>
                     <span aria-hidden="true">{admin.firstName}</span>
-                  </a>
+                  </button>
+
+                  <button
+                    className="text-white px-3 border-l border-white"
+                    onClick={logOut}
+                  >
+                    Log out
+                  </button>
                 </li>
               ) : (
                 <li className="-mx-6 mt-auto">

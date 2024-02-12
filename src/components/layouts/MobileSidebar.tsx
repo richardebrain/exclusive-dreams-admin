@@ -150,7 +150,7 @@ const MobileSidebar = () => {
         <div className="flex-1 text-sm font-semibold leading-6 text-white">
           Dashboard
         </div>
-        <a href="#">
+        <button>
           <span className="sr-only">Your profile</span>
           <Image
             className="h-8 w-8 rounded-full bg-gray-800"
@@ -159,7 +159,8 @@ const MobileSidebar = () => {
             width={32}
             height={32}
           />
-        </a>
+          <p>Log out</p>
+        </button>
       </div>
     </div>
   );
