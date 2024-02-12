@@ -14,7 +14,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     const subscribe = onAuthStateChanged(auth, async (userAuth) => {
       if (userAuth) {
         const adminRef = await getAdminFromDb(userAuth.uid)!;
-        console.log(adminRef, "userRef");
         if (!admin && adminRef) {
           dispatch(setAdmin(adminRef));
         }

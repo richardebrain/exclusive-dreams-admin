@@ -10,7 +10,6 @@ const UsersPage = () => {
   const [showOrders, setShowOrders] = useState(false);
   const [bUid, setUid] = useState("");
   const { users, isError, isLoading } = useUsers();
-  console.log(users, "users");
   // const fetchUserOrder = (uid: string) => {
   //   if (uid === bUid) {
   //     setShowOrders(!showOrders);
@@ -19,7 +18,6 @@ const UsersPage = () => {
   //   }
   // };
   const { orders, isLoading: userLoading } = useUserOrder(bUid);
-  console.log(orders, "orders");
   const fetchUserOrder = (uid: string) => {
     setShowOrders((prevShowOrders) => (uid === bUid ? !prevShowOrders : true));
   };

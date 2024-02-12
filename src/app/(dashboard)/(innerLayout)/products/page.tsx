@@ -8,7 +8,6 @@ import { useProducts } from "@/hooks/useProducts";
 export default function Page() {
   // const [products, setProducts] = useState<UploadProductType[]>([]);
   const { products, isLoading, isError } = useProducts();
-  console.log(products, "products");
   const [currentTab, setCurrentTab] = useState("all");
 
   return (

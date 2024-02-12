@@ -25,8 +25,6 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
         }),
       });
       const res = await fetchRes.json();
-      console.log(res);
-
       toast.success("Deleted Successfully");
     } catch (error) {
       console.log(error);

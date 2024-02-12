@@ -104,7 +104,6 @@ export default function Page() {
           return order;
         });
         // update orders
-        console.log(newOrders);
         setFilteredOrders(newOrders);
         alert(`Status changed to ${pickedStatus}`);
         setShowPrompt(false);

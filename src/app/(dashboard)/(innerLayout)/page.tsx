@@ -28,8 +28,7 @@ export default function Home() {
     return orderstatus;
   };
   const uniqueUsers = new Set(orders?.map((order) => order.userId));
-  console.log(uniqueUsers, "unique");
-  console.log(returnStatus(), "status");
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between py-24">
       <div className="w-full">

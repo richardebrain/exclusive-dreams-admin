@@ -124,12 +124,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       setValue("hasSize", true);
     }
   }, [watchCategory]);
-  console.log(
-    watchCategory,
-    "watchCategory",
-    watch("isFinishedInStore"),
-    "watchHasSize"
-  );
+
   return (
     <section className="">
       <div className="">

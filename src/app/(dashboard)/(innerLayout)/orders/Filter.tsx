@@ -38,7 +38,6 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setState((prev) => ({ ...prev, [name]: value }));
-    console.log(e.target.value);
     if (value === "") return setOrders(orders);
     if (name === "category") {
       filterByCategory(value);

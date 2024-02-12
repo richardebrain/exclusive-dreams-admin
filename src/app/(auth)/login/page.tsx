@@ -9,7 +9,6 @@ import { LoginType } from "@utils/type";
 import { signInAdminWithEmail } from "@/utils/firebase";
 import Link from "next/link";
 import Spinner from "@/components/Spinner";
-import AppleLogo from "@public/images/logos/apple.svg";
 import { useAppDispatch, useAppSelector } from "@redux/type";
 import { setAdmin } from "@/redux/admin.slice";
 import { useRouter } from "next/navigation";
@@ -37,7 +36,6 @@ const Page = () => {
       dispatch(setAdmin(res));
       router.push("/");
     }
-    console.log(res, "response");
   };
   useEffect(() => {
     if (admin) {
