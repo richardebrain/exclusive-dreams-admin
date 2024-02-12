@@ -12,7 +12,7 @@ export default function Page() {
   const [currentTab, setCurrentTab] = useState("all");
 
   return (
-    <main className="flex flex-col gap-10 max-w-4xl px-4 sm:px-5 mx-auto ">
+    <main className="flex flex-col gap-10 max-w-4xl mx-auto ">
       <h3 className="text-3xl font-bold">Products</h3>
       <div className=" flex flex-col gap-16">
         <div className="flex gap-4 relative h-12 overflow-x-auto overflow-y-hidden">

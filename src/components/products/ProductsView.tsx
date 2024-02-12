@@ -34,7 +34,7 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
     }
   };
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 overflow-hidden relative">
+    <div className="grid sm:grid-cols-2  md:grid-cols-3 gap-4 overflow-hidden relative">
       {type === "all" &&
         products.map((product) => (
           <div
@@ -70,7 +70,9 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
                 {product.productTitle}
               </h3>
               <span className="text-sm font-semibold text-gray-700">
-                ${product.price}
+                ${parseFloat(product.price).toLocaleString('en-US',{
+                  currency:'usd'
+                })}
               </span>
             </div>
           </div>
@@ -108,7 +110,9 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
             />
             <div className="flex flex-col gap-2">
               <h3 className="text-lg font-bold">{product.productTitle}</h3>
-              <span className="text-sm font-semibold">${product.price}</span>
+              <span className="text-sm font-semibold">${parseFloat(product.price).toLocaleString('en-US',{
+                  currency:'usd'
+                })}</span>
             </div>
           </div>
         ))}
