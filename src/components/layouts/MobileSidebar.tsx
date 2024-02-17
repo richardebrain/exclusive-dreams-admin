@@ -1,17 +1,28 @@
 "use client";
-import { Transition, Dialog } from "@headlessui/react";
+import { Transition, Dialog, Disclosure } from "@headlessui/react";
 import React, { Fragment, useState } from "react";
 import { navigation, uis } from "@/utils/navigations";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  ChevronUpIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Image from "next/image";
+import { logOutActions } from "@/redux/admin.slice";
+import { auth } from "@/utils/firebase";
+import { useAppDispatch } from "@/redux/type";
+import { usePathname } from "next/navigation";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+
 const MobileSidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
+  const dispatch = useAppDispatch();
   return (
     <div>
       {" "}
@@ -85,21 +96,79 @@ const MobileSidebar = () => {
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item) => (
                             <li key={item.name}>
-                              <Link
-                                href={item.href}
-                                className={classNames(
-                                  item.current
-                                    ? "bg-gray-800 text-white"
-                                    : "text-gray-400 hover:text-white hover:bg-gray-800",
-                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                                )}
-                              >
-                                <item.icon
-                                  className="h-6 w-6 shrink-0"
-                                  aria-hidden="true"
-                                />
-                                {item.name}
-                              </Link>
+                              {!item.children ? (
+                                <Link
+                                  href={item.href}
+                                  className={classNames(
+                                    item.href === pathname
+                                      ? "bg-gray-800 text-white"
+                                      : "text-gray-400 hover:text-white hover:bg-gray-800",
+                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                                  )}
+                                >
+                                  <item.icon
+                                    className="h-6 w-6 shrink-0"
+                                    aria-hidden="true"
+                                  />
+                                  {item.name}
+                                </Link>
+                              ) : (
+                                <Disclosure>
+                                  {({ open }: { open: boolean }) => (
+                                    <>
+                                      <Disclosure.Button
+                                        className={classNames(
+                                          item.current
+                                            ? "bg-gray-800 text-white"
+                                            : "text-gray-400 hover:text-white hover:bg-gray-800",
+                                          "group w-full flex justify-between gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                                        )}
+                                      >
+                                        <div className="flex items-center gap-x-3">
+                                          <item.icon
+                                            className="h-6 w-6 shrink-0"
+                                            aria-hidden="true"
+                                          />
+                                          {item.name}
+                                        </div>
+                                        <ChevronUpIcon
+                                          className={`${
+                                            open ? "rotate-180 transform" : ""
+                                          } h-5 w-5 text-purple-500`}
+                                        />
+                                      </Disclosure.Button>
+                                      <Disclosure.Panel className="">
+                                        <ul
+                                          role="list"
+                                          className="flex flex-col gap-y-2 pl-9"
+                                        >
+                                          {item.children.map((child) => (
+                                            <li key={child.name}>
+                                              <Link
+                                                href={child.href}
+                                                className={classNames(
+                                                  child.href === pathname
+                                                    ? "bg-gray-800 text-white"
+                                                    : "text-gray-400 hover:text-white hover:bg-gray-800",
+                                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                                                )}
+                                              >
+                                                <child.icon
+                                                  className="h-6 w-6 shrink-0"
+                                                  aria-hidden="true"
+                                                />
+                                                <span className="truncate">
+                                                  {child.name}
+                                                </span>
+                                              </Link>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </Disclosure.Panel>
+                                    </>
+                                  )}
+                                </Disclosure>
+                              )}
                             </li>
                           ))}
                         </ul>
@@ -150,7 +219,7 @@ const MobileSidebar = () => {
         <div className="flex-1 text-sm font-semibold leading-6 text-white">
           Dashboard
         </div>
-        <button>
+        <div className="flex gap-6  items-center justify-center">
           <span className="sr-only">Your profile</span>
           <Image
             className="h-8 w-8 rounded-full bg-gray-800"
@@ -159,8 +228,16 @@ const MobileSidebar = () => {
             width={32}
             height={32}
           />
-          <p>Log out</p>
-        </button>
+          <button
+            onClick={() => {
+              dispatch(logOutActions());
+              auth.signOut();
+            }}
+            className="text-white font-semibold"
+          >
+            Log out
+          </button>
+        </div>
       </div>
     </div>
   );

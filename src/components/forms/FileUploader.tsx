@@ -34,7 +34,7 @@ const FileUploader = forwardRef<
     return await onChange(event);
   };
   return (
-    <div className="bg-white w-1/2">
+    <div className="bg-white sm:w-1/2">
       <div className="max-w-md w-full">
         <div className="flex flex-col">
           <label

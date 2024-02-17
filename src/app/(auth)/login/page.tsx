@@ -33,6 +33,7 @@ const Page = () => {
   const handleLogin = async (data: LoginType) => {
     const res = await signInAdminWithEmail(data.email, data.password);
     if (res?.uid) {
+      console.log(res);
       dispatch(setAdmin(res));
       router.push("/");
     }

@@ -36,6 +36,7 @@ import {
   User,
 } from "./type";
 import { toast } from "react-toastify";
+import { set } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDWlcN0YzJQK57_nhENEgWjygznoiEhS1Q",
@@ -208,7 +209,7 @@ export const updateProductInStore = async (
   >
 ) => {
   const productRef = doc(storeCollections, productId);
-  console.log(data, "data in store")
+  console.log(data, "data in store");
   try {
     await updateDoc(productRef, {
       ...data,
@@ -243,13 +244,13 @@ export const getSingleProduct = async (productId: string) => {
     return;
   }
 };
-export const deleteProductFromDb= async (productId:string)=>{
-  const productRef = doc(storeCollections,productId)
-  const productSnap = await getDoc(productRef)
-  if(productSnap.exists()){
-    await deleteDoc(productRef)
+export const deleteProductFromDb = async (productId: string) => {
+  const productRef = doc(storeCollections, productId);
+  const productSnap = await getDoc(productRef);
+  if (productSnap.exists()) {
+    await deleteDoc(productRef);
   }
-}
+};
 
 const ordersCollections = collection(db, "orders");
 export const getAllOrders = async () => {
@@ -325,4 +326,41 @@ export const getUserOrderFromDb = async (uid: string) => {
     };
   }) as OrderType[];
   return userOrdersList;
+};
+
+export const addCarouselImages = async (images: FileList) => {
+  const carouseldb = collection(db, "carousels");
+  const carouselRef = doc(carouseldb, "carousel");
+  let imagesUrl: string[] = [];
+  const imagesArr = await Promise.all(
+    Array.from(images).map(async (img) => {
+      const imageUrl = await uploadImage(img);
+      return imageUrl;
+    })
+  );
+  try {
+    await setDoc(carouselRef, {
+      imagesArr,
+    });
+    toast.success("carousel added successfully");
+  } catch (error) {
+    console.log(error, "error adding carousel");
+    return;
+  }
+  return {
+    success: true,
+    urls: imagesArr as string[],
+  };
+};
+
+export const getCarouselImages = async () => {
+  const carouseldb = collection(db, "carousels");
+  const carouselSnap = await getDocs(carouseldb);
+  const carouselList = carouselSnap.docs.map((doc) => {
+    const { createdAt, ...rest } = doc.data();
+    return {
+      ...rest,
+    };
+  });
+  return carouselList[0].imagesArr;
 };

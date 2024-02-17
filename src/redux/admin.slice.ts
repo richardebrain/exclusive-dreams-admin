@@ -17,12 +17,16 @@ const adminSlice = createSlice({
       state.admin = action.payload;
     },
 
-    removeAdmin(state) {
+    logOut(state) {
       state.admin = null;
     },
   },
 });
 
-export const { setAdmin, removeAdmin } = adminSlice.actions;
+export const { setAdmin, logOut } = adminSlice.actions;
 
+export const logOutActions = () => async (dispatch: any) => {
+  dispatch(adminSlice.actions.logOut());
+
+};
 export default adminSlice.reducer;

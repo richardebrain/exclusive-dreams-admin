@@ -174,7 +174,7 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
                     </select>
                   </label>
                 </div>
-                <div>
+                {/* <div>
                   <label htmlFor="sort">
                     <span className="sr-only">Sort</span>
                     <select
@@ -196,7 +196,7 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
                       ))}
                     </select>
                   </label>
-                </div>
+                </div> */}
                 <button
                   className="bg-blue-500 text-white px-3 rounded-md py-1.5"
                   onClick={handleReset}

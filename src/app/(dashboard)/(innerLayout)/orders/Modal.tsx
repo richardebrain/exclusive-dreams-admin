@@ -106,7 +106,9 @@ const Modal = ({
                   </p>
                   <p className="text-sm text-gray-500">
                     <span className="font-semibold">Product Price:</span> $
-                    {product?.price}
+                    {parseFloat(product?.price).toLocaleString("en-us", {
+                      currency: "usd",
+                    })}
                   </p>
                   <p className="text-sm text-gray-500">
                     <span className="font-semibold">Shipping Fee:</span> $
@@ -118,13 +120,16 @@ const Modal = ({
                   </p>
                   {product.hasSize && (
                     <p className="text-sm text-gray-500">
-                      <span className="font-semibold capitalize" >Product Size:</span>{" "}
+                      <span className="font-semibold capitalize">
+                        Product Size:
+                      </span>{" "}
                       {product?.size}
                     </p>
                   )}
                   <p className="text-sm text-gray-500">
                     <span className="font-semibold">Date Placed:</span>{" "}
-                    {convertUnix(orderItself?.createdAt).formattedDate}
+                    {convertUnix(orderItself?.createdAt).dateOnly}{" "}
+                    {convertUnix(orderItself?.createdAt).timeZoneString}
                   </p>
                   <p className="text-sm text-gray-500">
                     <span className="font-semibold">Payment:</span>{" "}
@@ -136,7 +141,10 @@ const Modal = ({
                     <span className="font-semibold text-sm text-gray-500">
                       Total Amount:
                     </span>{" "}
-                    ${orderItself.amount / 100}
+                    $
+                    {(orderItself.amount / 100).toLocaleString("en-us", {
+                      currency: "usd",
+                    })}
                   </p>
                   <div>
                     <p className="text-sm text-gray-500">

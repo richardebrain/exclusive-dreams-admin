@@ -52,7 +52,7 @@ export default function CustomInput({
           id={name}
           {...register(name, { required })}
           className={classNames(
-            `block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm px-2  placeholder:text-gray-400 focus:ring-2 ring-1 ring-inset sm:text-sm sm:leading-6 outline-0 duration-100 focus:ring-black ring-gray-300 ${
+            `block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm px-2  placeholder:text-gray-400 focus:ring-2 ring-1 ring-inset sm:text-sm sm:leading-6 outline-0 duration-100 focus:ring-black ring-gray-300 placeholder:text-sm placeholder:sm:text-base ${
               errors
                 ? " ring-red-500 focus:ring-red-500 placeholder:text-red-500 text-red-500"
                 : " "

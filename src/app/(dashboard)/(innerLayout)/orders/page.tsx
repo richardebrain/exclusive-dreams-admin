@@ -122,7 +122,6 @@ export default function Page() {
   const handleNext = (event: { selected: number }) => {
     const selectedPage = event.selected;
     setSearch("");
-    const newParams = new URLSearchParams(params.toString());
     const newOffset = (selectedPage * itemsPerPage) % sortedOrders.length;
     setOffset(newOffset);
   };
@@ -136,7 +135,7 @@ export default function Page() {
     setSearch(searchId);
   }, [isOrderId]);
   useEffect(() => {
-    const filtered = orders.filter((order) => {
+    const filtered = sortedOrders.filter((order) => {
       return (
         order.orderId.toLowerCase().includes(search.toLowerCase()) ||
         (order.email &&
@@ -226,7 +225,10 @@ export default function Page() {
                             </div>
                           </td>
                           <td className="hidden py-6 pr-8 sm:table-cell">
-                            ${product.price}
+                            $
+                            {parseFloat(product.price).toLocaleString("en-us", {
+                              currency: "usd",
+                            })}
                           </td>
                           <td className="hidden py-6 pr-8 sm:table-cell">
                             <div className="flex flex-col gap-1">
@@ -281,7 +283,10 @@ export default function Page() {
                             </div>
                           </td>
                           <td className="hidden py-6 pr-8 sm:table-cell">
-                            ${product.price}
+                            $
+                            {parseFloat(product.price).toLocaleString("en-us", {
+                              currency: "usd",
+                            })}
                           </td>
                           <td className="hidden py-6 pr-8 sm:table-cell">
                             <div className="flex flex-col gap-1">
@@ -354,11 +359,11 @@ export default function Page() {
         setShowPrompt={setShowPrompt}
         setText={setText}
         setPickedStatus={setPickedStatus}
-        orders={orders}
+        orders={filteredOrders}
       />
       <div className="flex justify-between items-center">
         <p>
-          Showing {offset + 1} to {endOffset} of {orders.length} Orders
+          Showing {offset + 1} to {endOffset} of {filteredOrders.length} Orders
         </p>
 
         <Paginate pageCount={pageCount} handlePageClick={handleNext} />

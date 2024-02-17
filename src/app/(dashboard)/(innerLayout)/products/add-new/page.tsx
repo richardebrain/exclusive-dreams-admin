@@ -11,6 +11,7 @@ import FileUploader from "@/components/forms/FileUploader";
 import { fileExtensionTest, fileSizeTest } from "@/utils/yupTest";
 import { addProductToStore, uploadImage } from "@/utils/firebase";
 import { useEffect } from "react";
+import { routes } from "@/utils/routes";
 
 const schema = yup.object().shape({
   productTitle: yup.string().required("Product Title is required"),
@@ -55,11 +56,12 @@ const schema = yup.object().shape({
 });
 
 const categories = [
-  { value: "t-shirts", label: "T-shirts" },
-  { value: "headwears", label: "Head Wears" },
-  { value: "varsity-jackets", label: "Varsity Jackets" },
-  { value: "hoodies", label: "Hoodies" },
-  { value: "bottoms", label: "Bottoms" },
+  { value: routes["t-shirts"], label: "T-shirts" },
+  { value: routes["headwears"], label: "Head Wears" },
+  { value: routes["varsity-jackets"], label: "Varsity Jackets" },
+  { value: routes["hoodies"], label: "Hoodies" },
+  { value: routes["bottoms"], label: "Bottoms" },
+  { value: routes["shirts"], label: "Shirts" },
 ];
 export default function Page() {
   const {
@@ -94,7 +96,7 @@ export default function Page() {
   };
   const watchCategory = watch("category");
   useEffect(() => {
-    if (watchCategory === "headwears") {
+    if (watchCategory === routes["headwears"]) {
       setValue("hasSize", false);
     } else {
       setValue("hasSize", true);
@@ -117,7 +119,7 @@ export default function Page() {
             onSubmit={handleSubmit(handleProductSubmit)}
             className="flex flex-col space-y-4"
           >
-            <div className=" flex w-full gap-6">
+            <div className="flex flex-col gap-3 sm:flex-row w-full sm:gap-6">
               <CustomInput
                 type="text"
                 label="Product Title"
@@ -157,9 +159,9 @@ export default function Page() {
               placeholder="Enter product highlghts , if multiple separate by comma e.g. 100% cotton, washable"
               errors={errors.highlights?.message}
             />
-            <div className="flex w-full gap-6">
-              <div className=" flex flex-col w-2/4">
-                <div className="flex gap-px flex-col ">
+            <div className="flex flex-col gap-3 sm:flex-row w-full sm:gap-6">
+              <div className=" flex flex-col sm:w-2/4">
+                <div className="flex gap-px flex-col w-full">
                   <label
                     htmlFor="description"
                     className="block text-sm font-medium leading-6 mb-2 text-gray-900"
@@ -204,7 +206,7 @@ export default function Page() {
                   </p>
                 )}
               </div>
-              {watchCategory !== "headwears" && (
+              {watchCategory !== routes.headwears && (
                 <CustomInput
                   type="text"
                   label="Product Sizes"
@@ -216,7 +218,7 @@ export default function Page() {
                 />
               )}
             </div>
-            <div className="flex w-full gap-6 items-center">
+            <div className="flex flex-col gap-3 sm:flex-row w-full sm:gap-6 sm:items-center">
               <FileUploader
                 label="Product Images"
                 {...register("imageUrl")}
