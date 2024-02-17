@@ -11,6 +11,7 @@ import useSwr from "swr";
 import { updateOrderStatus } from "@/utils/firebase";
 import { fetcher } from "@/hooks/fetcher";
 import { useParams, useSearchParams } from "next/navigation";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function Page() {
   let [isOpen, setIsOpen] = useState(false);
@@ -121,38 +122,34 @@ export default function Page() {
   const currentItems = sortedOrders.slice(offset, endOffset);
   const handleNext = (event: { selected: number }) => {
     const selectedPage = event.selected;
-    setSearch("");
+    // setSearch("");
     const newOffset = (selectedPage * itemsPerPage) % sortedOrders.length;
     setOffset(newOffset);
   };
-  const currentItemsLength = currentItems.length;
-  useEffect(() => {
-    setFilteredOrders(currentItems);
-  }, [currentItemsLength]);
 
+  const searchId = params.get("orderId") || "";
   useEffect(() => {
-    const searchId = params.get("orderId") || "";
     setSearch(searchId);
   }, [isOrderId]);
-  useEffect(() => {
-    const filtered = sortedOrders.filter((order) => {
-      return (
-        order.orderId.toLowerCase().includes(search.toLowerCase()) ||
-        (order.email &&
-          order.email.toLowerCase().includes(search.toLowerCase()))
-      );
-    });
-    setFilteredOrders(filtered);
-  }, [currentItemsLength, search]);
+  const filtered =
+    search && search !== ""
+      ? sortedOrders.filter((order) => {
+          return (
+            order.orderId.toLowerCase().includes(search.toLowerCase()) ||
+            (order.email &&
+              order.email.toLowerCase().includes(search.toLowerCase()))
+          );
+        })
+      : currentItems;
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
 
   return (
-    <main className="flex flex-col gap-10 max-w-4xl mx-auto">
+    <main className="">
       {/* <h3 className="text-3xl font-bold">Orders</h3> */}
       <div>
         <Filter orders={currentItems} setOrders={setFilteredOrders} />
-        <div>
+        <div className="relative max-w-4xl mx-auto">
           <input
             type="text"
             value={search}
@@ -160,9 +157,17 @@ export default function Page() {
             placeholder="Search by Order No or email"
             className="w-full p-2 border border-gray-300 rounded-md"
           />
+          <button
+            className={`${
+              search === "" ? "hidden" : "block"
+            } absolute top-2.5 right-2 text-gray-500 cursor-pointer`}
+            onClick={() => setSearch("")}
+          >
+            <XMarkIcon className="h-5 w-5" />
+          </button>
         </div>
-        <div className="space-y-20">
-          {filteredOrders.map((order) => (
+        <div className="space-y-20 flex flex-col max-w-4xl mx-auto">
+          {filtered.map((order) => (
             <div key={order.orderId}>
               <h3 className="sr-only">
                 Order placed on{" "}
@@ -322,14 +327,12 @@ export default function Page() {
                       );
                     }
                   })}
-                  <tr className="py-4 h-10">
+                  <tr className="py-4 h-10 ">
                     <td colSpan={3}>Order Status:</td>
-                    {/* <td></td>
-                    <td></td>
-                    <td></td> */}
+
                     <td colSpan={2} className="text-right">
                       <span
-                        className={`"font-bold capitalize text-white px-2 shadow-md py-1.5 rounded-sm ${
+                        className={`"font-bold capitalize text-white px-2 shadow-md py-1.5 rounded-sm w-full inline-block ${
                           order.deliveryStatus === "shipped"
                             ? " bg-green-400"
                             : order.deliveryStatus === "order placed"
@@ -359,11 +362,11 @@ export default function Page() {
         setShowPrompt={setShowPrompt}
         setText={setText}
         setPickedStatus={setPickedStatus}
-        orders={filteredOrders}
+        orders={filtered}
       />
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row md:justify-between items-center max-w-4xl mx-auto">
         <p>
-          Showing {offset + 1} to {endOffset} of {filteredOrders.length} Orders
+          Showing {offset + 1} to {endOffset} of {filtered.length} Orders
         </p>
 
         <Paginate pageCount={pageCount} handlePageClick={handleNext} />

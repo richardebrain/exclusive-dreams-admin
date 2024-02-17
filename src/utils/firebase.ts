@@ -6,13 +6,8 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
-  updateEmail,
-  updatePassword,
 } from "firebase/auth";
 import {
-  DocumentData,
-  DocumentReference,
-  addDoc,
   collection,
   collectionGroup,
   deleteDoc,
@@ -36,7 +31,6 @@ import {
   User,
 } from "./type";
 import { toast } from "react-toastify";
-import { set } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDWlcN0YzJQK57_nhENEgWjygznoiEhS1Q",

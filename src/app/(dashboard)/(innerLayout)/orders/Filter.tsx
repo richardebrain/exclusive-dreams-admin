@@ -94,16 +94,15 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
   };
 
   return (
-    <div>
-      <section>
-        <div className="pt-20 pb-10 bg-white">
-          <div className=" mx-auto  max-w-7xl">
-            <div className="lg:flex lg:items-center lg:justify-between">
-              <p className="text-2xl font-bold text-center text-gray-900 lg:text-left">
-                Orders
-              </p>
-
-              <div className="flex items-center justify-center mt-6 space-x-5 sm:mt-8 lg:justify-end lg:mt-0  ">
+    <section className="">
+      <div className="pt-10 md:pt-20 pb-10 bg-white ">
+        <div className=" mx-auto max-w-4xl ">
+          <div className="lg:flex lg:items-center lg:justify-between relative overflow-x-scroll md:overflow-hidden w-full">
+            <p className="text-2xl font-bold text-center text-gray-900 lg:text-left">
+              Orders
+            </p>
+            <div className="">
+              <div className="flex items-center justify-center mt-6 space-x-5 sm:mt-8 lg:justify-end lg:mt-0 py-3 md:py-0 ">
                 <div>
                   <label htmlFor="category">
                     <span className="sr-only">Category</span>
@@ -207,8 +206,9 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* <div className="py-6 bg-gray-100">
+      {/* <div className="py-6 bg-gray-100">
           <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
             <div className="sm:flex sm:items-center sm:justify-between">
               <div className="sm:flex sm:items-center">
@@ -297,8 +297,7 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
             </div>
           </div>
         </div> */}
-      </section>
-    </div>
+    </section>
   );
 };
 

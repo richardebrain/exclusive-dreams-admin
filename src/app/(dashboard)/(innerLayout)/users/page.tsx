@@ -169,33 +169,37 @@ const UsersPage = () => {
                                     {showOrders &&
                                       user.uid === bUid &&
                                       orders &&
-                                      orders.map((order) => (
-                                        <tr
-                                          key={order.orderId}
-                                          className=" odd:bg-gray-100"
-                                        >
-                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
-                                            <Link
-                                              href={`/orders?orderId=${order.orderId}`}
-                                              className="text-blue-600 underline"
-                                            >
-                                              {order.orderId}
-                                            </Link>
-                                          </td>
-                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
-                                            {order.status}
-                                          </td>
-                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
-                                            {order.deliveryStatus}
-                                          </td>
-                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
-                                            {
-                                              convertUnix(order.createdAt)
-                                                .dateOnly
-                                            }
-                                          </td>
-                                        </tr>
-                                      ))}
+                                      orders
+                                        .sort(
+                                          (a, b) => b.createdAt - a.createdAt
+                                        )
+                                        .map((order) => (
+                                          <tr
+                                            key={order.orderId}
+                                            className=" odd:bg-gray-100"
+                                          >
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
+                                              <Link
+                                                href={`/orders?orderId=${order.orderId}`}
+                                                className="text-blue-600 underline"
+                                              >
+                                                {order.orderId}
+                                              </Link>
+                                            </td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
+                                              {order.status}
+                                            </td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
+                                              {order.deliveryStatus}
+                                            </td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-medium border ">
+                                              {
+                                                convertUnix(order.createdAt)
+                                                  .dateOnly
+                                              }
+                                            </td>
+                                          </tr>
+                                        ))}
                                   </tbody>
                                 </table>
                               </td>

@@ -101,12 +101,6 @@ export default function Page() {
     } else {
       setValue("hasSize", true);
     }
-    console.log(
-      watchCategory,
-      "watchCategory",
-      watch("hasSize"),
-      "watchHasSize"
-    );
   }, [watchCategory]);
   return (
     <section className="">

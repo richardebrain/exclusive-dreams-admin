@@ -77,6 +77,9 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
             </div>
           </div>
         ))}
+      {/* {products.filter((product) => product.category === type).length === 0 && (
+        <p className="text-center">No products in this category</p>
+      )} */}
       {products
         .filter((product) => product.category === type)
         .map((product) => (
