@@ -5,6 +5,36 @@ import { getAllProducts } from "@/utils/firebase";
 import { UploadProductType } from "@/utils/type";
 import { useProducts } from "@/hooks/useProducts";
 
+const tabs = [
+  {
+    name: "all",
+    label: "All",
+  },
+  {
+    name: "shirts",
+    label: "Shirts",
+  },
+  {
+    name: "t-shirts",
+    label: "T-Shirts",
+  },
+  {
+    name: "hoodies",
+    label: "Hoodies",
+  },
+  {
+    name: "bottoms",
+    label: "Bottoms",
+  },
+  {
+    name: "headwears",
+    label: "Headwears",
+  },
+  {
+    name: "varsity-jackets",
+    label: "Varsity Jackets",
+  },
+];
 export default function Page() {
   // const [products, setProducts] = useState<UploadProductType[]>([]);
   const { products, isLoading, isError } = useProducts();
@@ -16,61 +46,22 @@ export default function Page() {
       <div className=" flex flex-col gap-16">
         <div className="flex gap-4 relative h-12 overflow-x-auto overflow-y-hidden">
           <div className="flex gap-4 absolute">
-            <button
-              className={`px-4 py-2 rounded-md whitespace-nowrap  ${
-                currentTab === "all" ? "bg-black text-white" : "bg-gray-100"
-              }`}
-              onClick={() => setCurrentTab("all")}
-            >
-              All
-            </button>
-            <button
-              className={`px-4 py-2 rounded-md whitespace-nowrap  ${
-                currentTab === "t-shirts"
-                  ? "bg-black text-white"
-                  : "bg-gray-100"
-              }`}
-              onClick={() => setCurrentTab("t-shirts")}
-            >
-              T-Shirts
-            </button>
-            <button
-              className={`px-4 py-2 rounded-md whitespace-nowrap  ${
-                currentTab === "hoodies" ? "bg-black text-white" : "bg-gray-100"
-              }`}
-              onClick={() => setCurrentTab("hoodies")}
-            >
-              Hoodies
-            </button>
-            <button
-              className={`px-4 py-2 rounded-md whitespace-nowrap  ${
-                currentTab === "bottoms" ? "bg-black text-white" : "bg-gray-100"
-              }`}
-              onClick={() => setCurrentTab("bottoms")}
-            >
-              Bottoms
-            </button>
-            <button
-              className={`px-4 py-2 rounded-md whitespace-nowrap  ${
-                currentTab === "headwears"
-                  ? "bg-black text-white"
-                  : "bg-gray-100"
-              }`}
-              onClick={() => setCurrentTab("headwears")}
-            >
-              Headwears
-            </button>
-            <button
-              className={`px-4 py-2 rounded-md whitespace-nowrap  ${
-                currentTab === "varsity-jackets" ? "bg-black text-white" : ""
-              }`}
-              onClick={() => setCurrentTab("varsity-jackets")}
-            >
-              Varsity Jackets
-            </button>
+            {tabs.map((tab) => (
+              <button key={tab.name}
+                className={`px-4 py-2 rounded-md whitespace-nowrap  ${
+                  currentTab === tab.name
+                    ? "bg-black text-white"
+                    : "bg-gray-100"
+                }`}
+                onClick={() => setCurrentTab(tab.name)}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
         {!products && isLoading && <p>Loading...</p>}
+       
         {products && products.length > 0 && (
           <ProductsView type={currentTab} products={products} />
         )}

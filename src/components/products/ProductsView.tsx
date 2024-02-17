@@ -31,6 +31,7 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
       return;
     }
   };
+  console.log(products, "products");
   return (
     <div className="grid sm:grid-cols-2  md:grid-cols-3 gap-4 overflow-hidden relative">
       {type === "all" &&
@@ -68,13 +69,17 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
                 {product.productTitle}
               </h3>
               <span className="text-sm font-semibold text-gray-700">
-                ${parseFloat(product.price).toLocaleString('en-US',{
-                  currency:'usd'
+                $
+                {parseFloat(product.price).toLocaleString("en-US", {
+                  currency: "usd",
                 })}
               </span>
             </div>
           </div>
         ))}
+      {products.filter((product) => product.category === type).length === 0 && (
+        <p className="text-center">No products in this category</p>
+      )}
       {products
         .filter((product) => product.category === type)
         .map((product) => (
@@ -108,9 +113,12 @@ export const ProductsView = ({ type, products }: ProductsViewProps) => {
             />
             <div className="flex flex-col gap-2">
               <h3 className="text-lg font-bold">{product.productTitle}</h3>
-              <span className="text-sm font-semibold">${parseFloat(product.price).toLocaleString('en-US',{
-                  currency:'usd'
-                })}</span>
+              <span className="text-sm font-semibold">
+                $
+                {parseFloat(product.price).toLocaleString("en-US", {
+                  currency: "usd",
+                })}
+              </span>
             </div>
           </div>
         ))}
