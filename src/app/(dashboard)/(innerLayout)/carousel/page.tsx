@@ -120,11 +120,8 @@ const Page = () => {
                     <Image
                       src={img}
                       alt="carousel"
-                      blurDataURL=""
-                      placeholder="blur"
                       className="w-full h-full object-cover "
                       width={800}
-                      fill
                       height={800}
                     />
                   </div>
