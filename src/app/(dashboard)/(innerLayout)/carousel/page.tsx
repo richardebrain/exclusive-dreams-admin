@@ -18,7 +18,7 @@ const Schema = yup.object().shape({
   carousel: yup
     .mixed<FileList>()
     .test("fileSize", "File Size is too large", (value) => {
-      return fileSizeTest(value as FileList, 3, true);
+      return fileSizeTest(value as FileList, 10, true);
     })
     .test(
       "fileFormat",
