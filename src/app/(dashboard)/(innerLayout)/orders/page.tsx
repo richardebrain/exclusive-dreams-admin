@@ -366,7 +366,7 @@ export default function Page() {
       />
       <div className="flex flex-col md:flex-row md:justify-between items-center max-w-4xl mx-auto">
         <p>
-          Showing {offset + 1} to {endOffset} of {filtered.length} Orders
+          Showing {offset + 1} to {endOffset} of {sortedOrders.length} Orders
         </p>
 
         <Paginate pageCount={pageCount} handlePageClick={handleNext} />
