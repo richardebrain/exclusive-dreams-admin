@@ -14,6 +14,9 @@ interface Props {
   carousel: FileList;
 }
 
+const blurdata =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAAyCAYAAACqECmXAAAAt0lEQVR42u3VQQ0AAAgEIE1u9PNlCDcoQSc1BQC81kIHAKEDAEIHAIQOAAgdAIQOAAgdABA6ACB0ABA6ACB0AEDoAIDQAUDoAIDQAQChAwBCBwChAwBCBwCEDgAIHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAELrQAUDoAIDQAQChAwBCBwChAwBCBwCEDgCcBS1/fJ0tVMvCAAAAAElFTkSuQmCC";
+
 const Schema = yup.object().shape({
   carousel: yup
     .mixed<FileList>()
@@ -119,6 +122,8 @@ const Page = () => {
                   <div key={idx} className="relative w-40 h-40">
                     <Image
                       src={img}
+                      placeholder="blur"
+                      blurDataURL={blurdata}
                       alt="carousel"
                       className="w-full h-full object-cover "
                       width={800}

@@ -77,7 +77,23 @@ export default function Page() {
     );
     return result;
   };
-
+  const sendMail = async (email: string, text: string) => {
+    const dataToSend = {
+      to: email,
+      subject: "Order Status Update",
+      text: text,
+      html: `<p>${text}</p>`,
+    };
+    const res = await fetch("/api/sendMail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend),
+    });
+    const data = await res.json();
+    return data;
+  };
   useEffect(() => {
     if (showPrompt) {
       // show prompt here
@@ -95,6 +111,7 @@ export default function Page() {
                 );
                 if (update.success) {
                   order.deliveryStatus = pickedStatus;
+
                   mutate();
                 }
               })();
