@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     subject: `Your Exclusive Dreams Order ${orderDetails.orderId} has been ${subjectMessage}`,
     context: {
       orderNo: orderDetails.orderId,
-      status: statusType,
+      status: subjectMessage,
       name: orderDetails.shipping.name,
       shipping: orderDetails.deliveryFee,
       products,

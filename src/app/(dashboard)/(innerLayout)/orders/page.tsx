@@ -13,6 +13,7 @@ import { fetcher } from "@/hooks/fetcher";
 import { useParams, useSearchParams } from "next/navigation";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { stat } from "fs";
+import Spinner from "@/components/Spinner";
 
 export default function Page() {
   let [isOpen, setIsOpen] = useState(false);
@@ -100,7 +101,6 @@ export default function Page() {
       if (result) {
         // change status here
         const newOrders = filtered.map((order) => {
-          console.log(selected.orderId, order.orderId);
           if (order.orderId === selected.orderId) {
             try {
               (async () => {
@@ -113,7 +113,6 @@ export default function Page() {
                 if (update.success) {
                   order.deliveryStatus = pickedStatus;
                   const res = await sendMail(pickedStatus, order);
-                  console.log(res, "mail sent");
                   mutate();
                 }
               })();
@@ -161,10 +160,15 @@ export default function Page() {
         })
       : currentItems;
   if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  if (!data)
+    return (
+      <div className="py-20 ">
+        <Spinner className="mx-auto fill-black w-6 h-6 animate-spin" />
+      </div>
+    );
 
   return (
-    <main className="">
+    <main className="min-h-[80vh] flex flex-col justify-between">
       {/* <h3 className="text-3xl font-bold">Orders</h3> */}
       <div>
         <Filter orders={currentItems} setOrders={setFilteredOrders} />
@@ -185,6 +189,11 @@ export default function Page() {
             <XMarkIcon className="h-5 w-5" />
           </button>
         </div>
+        {!isLoading && !filtered.length && (
+          <div className="text-center mt-6">
+            <p>No order have been Made.</p>
+          </div>
+        )}
         <div className="space-y-20 flex flex-col max-w-4xl mx-auto">
           {filtered.map((order) => (
             <div key={order.orderId}>
@@ -383,7 +392,7 @@ export default function Page() {
         setPickedStatus={setPickedStatus}
         orders={filtered}
       />
-      <div className="flex flex-col md:flex-row md:justify-between items-center max-w-4xl mx-auto">
+      <div className="flex flex-col self-end md:flex-row md:justify-between items-center max-w-4xl mx-auto">
         <p>
           Showing {offset + 1} to {endOffset} of {sortedOrders.length} Orders
         </p>

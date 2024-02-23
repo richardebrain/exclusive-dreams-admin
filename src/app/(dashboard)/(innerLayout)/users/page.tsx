@@ -70,10 +70,10 @@ const UsersPage = () => {
                       </tr>
                     </thead>
 
-                    {!isLoading && !users && (
+                    {!isLoading && !users?.length && (
                       <tbody className="divide-y divide-gray-200 bg-white">
-                        <tr className="">
-                          <td className="py-4 px-3 col-span-4 mx-auto">
+                        <tr className="mx-auto text-center">
+                          <td className="py-4 px-3 col-span-4 mx-auto text-center" colSpan={4}>
                             No users found
                           </td>
                         </tr>
