@@ -38,29 +38,48 @@ export async function POST(req: Request) {
       pass: "unjiuoddajvxtsxq",
     },
   });
-const emailDir = fs.readdirSync(path.resolve("./views"));  
-console.log(emailDir, "emailDir");
-const handlebarsOptions = {
-  viewEngine: {
-    partialsDir: path.resolve("./views"),
-    defaultLayout: false,
-  },
-  viewPath: path.resolve("./views"),
-  extName: ".hbs",
-};
+  const emailDir = fs.readdirSync(path.resolve("./views"));
+  console.log(emailDir, "emailDir");
+  const handlebarsOptions = {
+    viewEngine: {
+      partialsDir: path.resolve("./views"),
+      defaultLayout: false,
+    },
+    viewPath: path.resolve("./views"),
+    extName: ".hbs",
+  };
   transporter.use("compile", hbs(handlebarsOptions));
+  const products = orderDetails.cart.map((item: ProductCheckoutType) => {
+    return {
+      image: item.imageUrl,
+      title: item.productTitle,
+      quantity: item.quantity,
+      price: parseFloat(item.price).toLocaleString("en-us", {
+        currency: "usd",
+      }),
+    };
+  });
+  const subTotal = orderDetails.cart
+    .reduce((acc, item) => {
+      return acc + parseFloat(item.price) * item.quantity;
+    }, 0)
+    .toLocaleString("en-us", {
+      currency: "usd",
+    });
   const mailOptions = {
     from: "exclusivedreamsllc01@gmail.com",
     to: orderDetails.email,
-    template:"email",
+    template: "email",
     subject: `Your Exclusive Dreams Order ${orderDetails.orderId} has been ${subjectMessage}`,
     context: {
       orderNo: orderDetails.orderId,
       status: statusType,
       name: orderDetails.shipping.name,
-      shipping: orderDetails.shipping,
+      shipping: orderDetails.deliveryFee,
+      products,
       orderItems: orderDetails.totalItems,
-      totalAmount: orderDetails.amount.toLocaleString("en-us", {
+      subTotal,
+      totalAmount: (orderDetails.amount / 100).toLocaleString("en-us", {
         currency: "usd",
       }),
     },
@@ -77,6 +96,3 @@ const handlebarsOptions = {
     console.log(err, "error");
   }
 }
-
-
-
