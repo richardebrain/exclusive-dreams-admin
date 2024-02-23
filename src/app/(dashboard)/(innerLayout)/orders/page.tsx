@@ -12,6 +12,7 @@ import { updateOrderStatus } from "@/utils/firebase";
 import { fetcher } from "@/hooks/fetcher";
 import { useParams, useSearchParams } from "next/navigation";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { stat } from "fs";
 
 export default function Page() {
   let [isOpen, setIsOpen] = useState(false);
@@ -77,12 +78,10 @@ export default function Page() {
     );
     return result;
   };
-  const sendMail = async (email: string, text: string) => {
+  const sendMail = async (statusType: string, order: OrderType) => {
     const dataToSend = {
-      to: email,
-      subject: "Order Status Update",
-      text: text,
-      html: `<p>${text}</p>`,
+      statusType: statusType,
+      orderDetails: order,
     };
     const res = await fetch("/api/sendMail", {
       method: "POST",
@@ -100,7 +99,8 @@ export default function Page() {
       const result = window.confirm(`${title} ${text}`);
       if (result) {
         // change status here
-        const newOrders = filteredOrders.map((order) => {
+        const newOrders = filtered.map((order) => {
+          console.log(selected.orderId, order.orderId);
           if (order.orderId === selected.orderId) {
             try {
               (async () => {
@@ -109,9 +109,11 @@ export default function Page() {
                   selected.orderId,
                   pickedStatus
                 );
+                console.log(update, "update");
                 if (update.success) {
                   order.deliveryStatus = pickedStatus;
-
+                  const res = await sendMail(pickedStatus, order);
+                  console.log(res, "mail sent");
                   mutate();
                 }
               })();

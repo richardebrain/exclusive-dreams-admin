@@ -47,7 +47,6 @@ const Modal = ({
         })
       : null;
   const orderItself = orders[orderIndex];
-  console.log(orderItself, "orderItself");
   if (!product) return null;
   return (
     <Transition appear show={isOpen} as={Fragment}>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .container {
+            padding: 10px 5px;
+            margin: 0 auto;
+        }
+
+        .first_child {
+            border: 1px solid #000;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .first_child h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .content .customer_name {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .content .thanks {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .content .order_confirm {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .content .confirm_details {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .conditions {
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+        }
+
+        .conditions p:first-child {
+            font-weight: 700;
+        }
+
+        .conditions ul {
+            padding-left: 24px;
+        }
+
+        .conditions ul li {
+            list-style: disc;
+            font-weight: 400;
+            margin-top: 5px;
+        }
+
+        .product_details {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .product_table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid grey;
+        }
+
+        .product_table th {
+            border: 1px solid grey;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .product_table td {
+            border: 1px solid grey;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .product_table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .product_table tr:nth-child(odd) {
+            background-color: #fff;
+        }
+
+        .product_pricing {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .product_pricing .pricing {
+            font-size: 14px;
+            font-weight: 800;
+            color: gray;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .exclusive_footer {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-size: 13px;
+            font-weight: 400;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="first_child">
+            <h1>Exclusive Dreams</h1>
+
+            <div class="content">
+                <h3 class="customer_name">Dear {{Name}}</h3>
+                <p class="thanks">Thank you for shopping on Exclusive Dreams!</p>
+                <p class="order_confirm">
+                    your order {{orderNo}} has been placed successfully.
+                </p>
+                <p class="confirm_details">
+                    It will be packed and shipped as soon as possible. you will also
+                    receive a confirmation email with the tracking number once your
+                    order(s) has been shipped.
+                </p>
+                <div class="conditions">
+                    <p>Note :</p>
+                    <ul>
+                        <li>
+                            please Note that ,if you made an order where you purchase
+                            multiple items , canceling one item will cancel the entire order
+                            because we ship all items together.
+                        </li>
+                        <li>
+                            If you have any questions about your order, please contact us at
+                            <a href="mailto:exclusivedreamsllc01@gmail.com">ExclusiveDreams</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="product_details">
+                    <h3>Order Details</h3>
+                    <table class="product_table">
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                        <tr>
+                            <td>{{product}}</td>
+                            <td>{{quantity}}</td>
+                            <td>{{price}}</td>
+                        </tr>
+                    </table>
+                    <div class="product_pricing">
+                        <div class="pricing">
+                            <p>SubTotal</p>
+                            <p>{{subtotal}}</p>
+                        </div>
+                        <div class="pricing">
+                            <p>Shipping</p>
+                            <p>{{shipping}}</p>
+                        </div>
+                        <div class="pricing">
+                            <p>Total</p>
+                            <p>{{total}}</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="exclusive_footer">
+                    <p class="">
+                        Need help with your order? Contact us at
+                        <a href="mailto:exclusivedreamsllc01@gmail.com">ExclusiveDreams</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

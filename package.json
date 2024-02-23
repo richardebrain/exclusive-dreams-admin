@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -16,9 +16,11 @@
     "@svgr/webpack": "^8.1.0",
     "@types/react-select": "^5.0.1",
     "@types/redux-persist": "^4.3.1",
+    "dotenv": "^16.4.5",
     "firebase": "^10.7.1",
     "next": "14.0.2",
     "nodemailer": "^6.9.9",
+    "nodemailer-express-handlebars": "^6.1.2",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.49.3",
