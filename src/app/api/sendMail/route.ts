@@ -1,5 +1,4 @@
 import { OrderType, ProductCheckoutType } from "@/utils/type";
-import { fstat } from "fs";
 import { NextResponse } from "next/server";
 import path from "path";
 const nodemailer = require("nodemailer");
