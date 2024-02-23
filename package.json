@@ -19,7 +19,6 @@
     "dotenv": "^16.4.5",
     "express-handlebars": "^7.1.2",
     "firebase": "^10.7.1",
-    "handlebars": "^4.7.8",
     "next": "14.0.2",
     "nodemailer": "^6.9.9",
     "nodemailer-express-handlebars": "6.1.0",

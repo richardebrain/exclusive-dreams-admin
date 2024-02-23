@@ -38,20 +38,21 @@ export async function POST(req: Request) {
       pass: "unjiuoddajvxtsxq",
     },
   });
-const emailDir = fs.readdirSync(path.resolve("./src/views"));  
+const emailDir = fs.readdirSync(path.resolve("./views"));  
 console.log(emailDir, "emailDir");
 const handlebarsOptions = {
   viewEngine: {
-    partialsDir: path.resolve("./src/views"),
+    partialsDir: path.resolve("./views"),
     defaultLayout: false,
   },
-  viewPath: path.resolve("./src/views"),
+  viewPath: path.resolve("./views"),
   extName: ".hbs",
 };
   transporter.use("compile", hbs(handlebarsOptions));
   const mailOptions = {
     from: "exclusivedreamsllc01@gmail.com",
     to: orderDetails.email,
+    template:"email",
     subject: `Your Exclusive Dreams Order ${orderDetails.orderId} has been ${subjectMessage}`,
     context: {
       orderNo: orderDetails.orderId,
@@ -76,3 +77,6 @@ const handlebarsOptions = {
     console.log(err, "error");
   }
 }
+
+
+

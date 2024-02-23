@@ -10,6 +10,13 @@ const nextConfig = {
       },
     ],
   },
+  webpack(config) {
+    config.resolve.alias["handlebars"] = resolve(
+      __dirname,
+      "node_modules/handlebars/dist/cjs/handlebars.js"
+    );
+    return config;
+  },
 };
 
 module.exports = nextConfig;
