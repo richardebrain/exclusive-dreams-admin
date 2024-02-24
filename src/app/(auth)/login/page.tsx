@@ -15,8 +15,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(8).max(20).required(),
+  email: yup.string().email().required("Email is required"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(20)
+    .required("Password is required"),
 });
 
 const Page = () => {
@@ -89,7 +93,10 @@ const Page = () => {
 
             <div className="flex items-center justify-between">
               <div className="text-sm leading-6">
-                <Link className="font-semibold text-blue-600 hover:text-blue-500" href={'#'}>
+                <Link
+                  className="font-semibold text-blue-600 hover:text-blue-500"
+                  href={"#"}
+                >
                   Forgot password?
                 </Link>
               </div>
