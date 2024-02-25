@@ -19,9 +19,8 @@ export default function Page() {
   let [isOpen, setIsOpen] = useState(false);
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [offset, setOffset] = useState(0);
-  const [search, setSearch] = useState("");
+  const [isFiltered, setIsFiltered] = useState(false);
   const params = useSearchParams();
-  const isOrderId = params.has("orderId");
 
   function closeModal() {
     setIsOpen(false);
@@ -94,6 +93,7 @@ export default function Page() {
     const data = await res.json();
     return data;
   };
+  
   useEffect(() => {
     if (showPrompt) {
       // show prompt here
@@ -132,7 +132,6 @@ export default function Page() {
       }
     }
   }, [showPrompt]);
-
   const sortedOrders = orders.sort((a, b) => b.createdAt - a.createdAt);
   const itemsPerPage = 10;
   const endOffset = offset + itemsPerPage;
@@ -146,23 +145,7 @@ export default function Page() {
   };
 
   const searchId = params.get("orderId") || "";
-  useEffect(() => {
-    setSearch(searchId);
-  }, [isOrderId]);
-
-  const filtered =
-    search && search !== ""
-      ? sortedOrders.filter((order) => {
-          return (
-            order.orderId.toLowerCase().includes(search.toLowerCase()) ||
-            (order.email &&
-              order.email.toLowerCase().includes(search.toLowerCase()))
-          );
-        })
-      : filteredOrders
-      ? filteredOrders
-      : currentItems;
-      console.log(filtered, "filtered")
+  const filtered = isFiltered ? filteredOrders : currentItems;
   if (error) return <div>failed to load</div>;
   if (!data)
     return (
@@ -175,24 +158,13 @@ export default function Page() {
     <main className="min-h-[80vh] flex flex-col justify-between">
       {/* <h3 className="text-3xl font-bold">Orders</h3> */}
       <div>
-        <Filter orders={currentItems} setOrders={setFilteredOrders} />
-        <div className="relative max-w-4xl mx-auto">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by Order No or email"
-            className="w-full p-2 border border-gray-300 rounded-md"
-          />
-          <button
-            className={`${
-              search === "" ? "hidden" : "block"
-            } absolute top-2.5 right-2 text-gray-500 cursor-pointer`}
-            onClick={() => setSearch("")}
-          >
-            <XMarkIcon className="h-5 w-5" />
-          </button>
-        </div>
+        <Filter
+          orders={sortedOrders}
+          setOrders={setFilteredOrders}
+          searchId={searchId}
+          setIsFiltered={setIsFiltered}
+        />
+
         {!isLoading && !filtered.length && (
           <div className="text-center mt-6">
             <p>No order have been Made.</p>
@@ -398,7 +370,7 @@ export default function Page() {
       />
       <div className="max-md:mt-10 flex flex-col md:gap-6 self-end md:flex-row md:justify-between items-center max-w-4xl mx-auto">
         <p>
-          Showing {offset + 1} to {endOffset} of {sortedOrders.length} Orders
+          Showing {offset + 1} to {endOffset} of {filtered.length} Orders
         </p>
 
         <Paginate pageCount={pageCount} handlePageClick={handleNext} />

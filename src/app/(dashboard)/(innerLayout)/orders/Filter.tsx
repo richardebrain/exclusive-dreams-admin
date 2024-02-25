@@ -1,6 +1,7 @@
 "use client";
 import { OrderType } from "@/utils/type";
-import React, { useState } from "react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import React, { use, useEffect, useState } from "react";
 const categories = [
   { value: "t-shirts", label: "T-shirts" },
   { value: "headwears", label: "Head Wears" },
@@ -26,19 +27,42 @@ const deliveryOptions = [
 
 interface FilterProps {
   orders: OrderType[];
+  searchId: string;
   setOrders: React.Dispatch<React.SetStateAction<OrderType[]>>;
+  setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const Filter = ({ orders, setOrders }: FilterProps) => {
+const Filter = ({
+  orders,
+  setOrders,
+  searchId,
+  setIsFiltered,
+}: FilterProps) => {
   const [state, setState] = useState({
     category: "",
     paymentStatus: "",
     deliveryStatus: "",
     sort: "",
+    search: "",
   });
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+
+  useEffect(() => {
+    if (searchId === "") return setOrders(orders);
+    const newOrders = orders.filter(
+      (order) => order.orderId === searchId || order.email === searchId
+    );
+    setIsFiltered(true);
+    setState((prev) => ({ ...prev, search: searchId }));
+    setOrders(newOrders);
+  }, [orders]);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
+
     setState((prev) => ({ ...prev, [name]: value }));
+
     if (value === "") return setOrders(orders);
+    setIsFiltered(true);
     if (name === "category") {
       filterByCategory(value);
     }
@@ -58,6 +82,13 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
         setOrders(newOrders);
       }
     }
+    if (name === "search") {
+      console.log(value, searchId);
+      const newOrders = orders.filter(
+        (order) => order.orderId === value || order.email === value
+      );
+      setOrders(newOrders);
+    }
   };
 
   const handleReset = () => {
@@ -66,8 +97,10 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
       paymentStatus: "",
       deliveryStatus: "",
       sort: "",
+      search: "",
     });
     setOrders(orders);
+    setIsFiltered(false);
   };
   const filterByDeliveryStatus = (status: string) => {
     const newOrders = orders.filter((order) => order.deliveryStatus === status);
@@ -204,6 +237,28 @@ const Filter = ({ orders, setOrders }: FilterProps) => {
                 </button>
               </div>
             </div>
+          </div>
+          <div className="relative max-w-4xl mx-auto mt-10">
+            <input
+              type="text"
+              value={state.search}
+              onChange={(e) => handleChange(e)}
+              name="search"
+              placeholder="Search by Order No or email"
+              className="w-full p-2 border border-gray-300 rounded-md"
+            />
+            <button
+              className={`${
+                state.search === "" ? "hidden" : "block"
+              } absolute top-2.5 right-2 text-gray-500 cursor-pointer`}
+              onClick={() => {
+                setState({ ...state, search: "" }),
+                  setOrders(orders),
+                  setIsFiltered(false);
+              }}
+            >
+              <XMarkIcon className="h-5 w-5" />
+            </button>
           </div>
         </div>
       </div>
