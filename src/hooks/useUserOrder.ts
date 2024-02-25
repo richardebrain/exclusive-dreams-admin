@@ -13,3 +13,15 @@ export const useUserOrder = (uid: string) => {
     isError: error,
   };
 };
+
+export const useGuestOrder = (guestId: string) => {
+  const { data, error, isLoading } = useSWR<OrderType[]>(
+    `/api/getAllOrders/${guestId}`,
+    fetcher
+  );
+  return {
+    orders: data,
+    isLoading: isLoading,
+    isError: error,
+  };
+};

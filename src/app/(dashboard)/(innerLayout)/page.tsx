@@ -1,5 +1,5 @@
 "use client";
-import { useOrders } from "@/hooks/useOrders";
+import { useGuestOrders, useOrders } from "@/hooks/useOrders";
 import { useUsers } from "@/hooks/useUsers";
 import { OrderType } from "@/utils/type";
 import {
@@ -12,8 +12,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
-  const { users, isLoading, isError } = useUsers();
-  const { orders, isLoading: orderLoading, isError: orderError } = useOrders();
+  const { guest, isLoading, isError } = useUsers();
+  const { orders, isLoading: orderLoading, isError: orderError } = useGuestOrders();
   const returnStatus = () => {
     const status = ["succeeded", "refunded"];
     // group by status
@@ -27,7 +27,7 @@ export default function Home() {
     }, {} as Record<string, OrderType[]>);
     return orderstatus;
   };
-  const uniqueUsers = new Set(orders?.map((order) => order.userId));
+  const uniqueUsers = new Set(orders?.map((order) => order.guestId));
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between py-24">
@@ -40,21 +40,21 @@ export default function Home() {
               <div className="flex gap-4">
                 <UserCircleIcon className="w-7  h-7 self-center text-white stroke-2" />
                 <p className="text-2xl font-bold">
-                  Total Users:{" "}
+                  Total Guest:{" "}
                   <span className="font-normal text-gray-600">
-                    {users?.length}
+                    {guest?.length}
                   </span>
                 </p>
               </div>
               <div className="mt-3">
-                <p className="text-gray-800 font-medium">Users With Transactions : {uniqueUsers.size}</p>
+                <p className="text-gray-800 font-medium">Guest With Transactions : {uniqueUsers.size}</p>
               </div>
             </div>
             <Link
               href={"/users"}
               className=" gap-1 text-blue-600 items-center  block underline group hover:text-blue-700"
             >
-              click to see all Users
+              click to see all Guest
               <ArrowRightIcon className="w-5 h-5 stroke-2 inline ml-1 group-hover:translate-x-1 duration-300" />
             </Link>
           </div>

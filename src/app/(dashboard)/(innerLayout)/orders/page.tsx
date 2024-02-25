@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, use, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { OrderType, ProductCheckoutType } from "@/utils/type";
 import { StatusDropDown } from "@/components/orders/StatusDropdown";
@@ -149,6 +149,7 @@ export default function Page() {
   useEffect(() => {
     setSearch(searchId);
   }, [isOrderId]);
+
   const filtered =
     search && search !== ""
       ? sortedOrders.filter((order) => {
@@ -158,7 +159,10 @@ export default function Page() {
               order.email.toLowerCase().includes(search.toLowerCase()))
           );
         })
+      : filteredOrders
+      ? filteredOrders
       : currentItems;
+      console.log(filtered, "filtered")
   if (error) return <div>failed to load</div>;
   if (!data)
     return (
@@ -392,7 +396,7 @@ export default function Page() {
         setPickedStatus={setPickedStatus}
         orders={filtered}
       />
-      <div className="flex flex-col self-end md:flex-row md:justify-between items-center max-w-4xl mx-auto">
+      <div className="max-md:mt-10 flex flex-col md:gap-6 self-end md:flex-row md:justify-between items-center max-w-4xl mx-auto">
         <p>
           Showing {offset + 1} to {endOffset} of {sortedOrders.length} Orders
         </p>

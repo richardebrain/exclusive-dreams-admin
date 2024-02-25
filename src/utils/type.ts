@@ -130,3 +130,8 @@ export type User = {
   lastName: string;
   uid: string;
 };
+
+export type GuestType = OrderType & {
+  isAuthenticated: boolean;
+  guestId: string;
+}

@@ -25,12 +25,14 @@ import {
 import {
   AddProductForm,
   AdminType,
+  GuestType,
   OrderType,
   RegisterAdminForm,
   UploadProductType,
   User,
 } from "./type";
 import { toast } from "react-toastify";
+import { group } from "console";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDWlcN0YzJQK57_nhENEgWjygznoiEhS1Q",
@@ -357,4 +359,40 @@ export const getCarouselImages = async () => {
     };
   });
   return carouselList[0].imagesArr;
+};
+
+export const getGuests = async () => {
+  const guestCollection = collection(db, "guests");
+  const guests = await getDocs(guestCollection);
+  const guestsList = guests.docs.map((doc) => {
+    return doc.ref.id;
+  });
+
+  return guestsList;
+};
+
+export const getGuestsContent = async () => {
+  const queries = query(collectionGroup(db, "orders"));
+  const orders = await getDocs(queries);
+  const ordersList = orders.docs.map((doc) => {
+    return {
+      ...doc.data(),
+    };
+  }) as GuestType[];
+  return ordersList;
+};
+
+export const getGuestOrderFromDb = async (guestId: string) => {
+  console.log(guestId, "guestId");
+  const getGuestRef = query(
+    collectionGroup(db, "orders"),
+    where("guestId", "==", guestId)
+  );
+  const guestOrders = await getDocs(getGuestRef);
+  const guestOrdersList = guestOrders.docs.map((doc) => {
+    return {
+      ...doc.data(),
+    };
+  }) as OrderType[];
+  return guestOrdersList;
 };

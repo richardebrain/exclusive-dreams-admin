@@ -1,12 +1,22 @@
-'use client'
+"use client";
 import useSWR from "swr";
 import { fetcher } from "./fetcher";
-import { User } from "@/utils/type";
+import { GuestType, User } from "@/utils/type";
 
 export const useUsers = () => {
-  const { data, error, isLoading } = useSWR<User[]>("/api/getAllUsers", fetcher);
+  const { data, error, isLoading } = useSWR<GuestType[]>(
+    "/api/getAllUsers",
+    fetcher
+  );
+  const uniqueUsers = data?.reduce((acc: GuestType[], curr) => {
+    if (!acc.find((user) => user.guestId === curr.guestId)) {
+      acc.push(curr);
+    }
+    return acc;
+  }, []);
+
   return {
-    users: data,
+    guest: uniqueUsers,
     isLoading: isLoading,
     isError: error,
   };

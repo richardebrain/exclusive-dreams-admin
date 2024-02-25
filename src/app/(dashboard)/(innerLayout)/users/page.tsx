@@ -2,21 +2,16 @@
 import Spinner from "@/components/Spinner";
 import { useUserOrder } from "@/hooks/useUserOrder";
 import { useUsers } from "@/hooks/useUsers";
+import { getGuestOrderFromDb, getGuests, getGuestsContent } from "@/utils/firebase";
 import { convertUnix } from "@/utils/unixFormatter";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const UsersPage = () => {
   const [showOrders, setShowOrders] = useState(false);
   const [bUid, setUid] = useState("");
-  const { users, isError, isLoading } = useUsers();
-  // const fetchUserOrder = (uid: string) => {
-  //   if (uid === bUid) {
-  //     setShowOrders(!showOrders);
-  //   }else{
-  //     setShowOrders(true);
-  //   }
-  // };
+  const { guest, isError, isLoading } = useUsers();
+ 
   const { orders, isLoading: userLoading } = useUserOrder(bUid);
   const fetchUserOrder = (uid: string) => {
     setShowOrders((prevShowOrders) => (uid === bUid ? !prevShowOrders : true));
@@ -44,17 +39,17 @@ const UsersPage = () => {
                     <thead>
                       <tr>
                         <th
-                          scope="col"
+                          scope="col" colSpan={2}
                           className="py-3 pl-4 pr-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 sm:pl-0"
                         >
-                          First Name
+                          Full Name
                         </th>
-                        <th
+                        {/* <th
                           scope="col"
                           className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
                         >
                           Last Name
-                        </th>
+                        </th> */}
                         <th
                           scope="col"
                           className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
@@ -70,7 +65,7 @@ const UsersPage = () => {
                       </tr>
                     </thead>
 
-                  {!isLoading && !users?.length && (
+                  {!isLoading && !guest?.length && (
                       <tbody className="divide-y divide-gray-200 bg-white">
                         <tr className="mx-auto text-center">
                           <td className="py-4 px-3 col-span-4 mx-auto text-center" colSpan={4}>
@@ -79,7 +74,7 @@ const UsersPage = () => {
                         </tr>
                       </tbody>
                     )}
-                    {isLoading && !users ? (
+                    {isLoading && !guest ? (
                       <tbody className="divide-y divide-gray-200 bg-white">
                         <tr>
                           <td colSpan={4} className="">
@@ -88,19 +83,17 @@ const UsersPage = () => {
                         </tr>
                       </tbody>
                     ) : (
-                      users &&
-                      users.map((user) => (
+                      guest &&
+                      guest.map((user) => (
                         <tbody
                           className="divide-y divide-gray-200 bg-white"
-                          key={user.uid}
+                          key={user.guestId}
                         >
                           <tr className=" relative">
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                              {user.firstName}
+                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0" colSpan={2}>
+                              {user.shipping.name}
                             </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900 font-medium">
-                              {user.lastName}
-                            </td>
+                            
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                               {user.email}
                             </td>
@@ -109,19 +102,19 @@ const UsersPage = () => {
                               <button
                                 type="button"
                                 onClick={() => {
-                                  fetchUserOrder(user.uid);
-                                  setUid(user.uid);
+                                  fetchUserOrder(user.guestId);
+                                  setUid(user.guestId);
                                 }}
                                 className="text-indigo-600 hover:text-indigo-900"
                               >
                                 View orders
                                 <span className="sr-only">
-                                  , {user.firstName}
+                                  , {user.shipping.name}
                                 </span>
                               </button>
                             </td>
                           </tr>
-                          {showOrders && user.uid === bUid && (
+                          {showOrders && user.guestId === bUid && (
                             <tr className="">
                               <td className="col-span-4 row-span-4" colSpan={4}>
                                 <table className="w-full border  divide-y divide-gray-300 border-collapse">
@@ -143,7 +136,7 @@ const UsersPage = () => {
                                   </thead>
                                   <tbody>
                                     {showOrders &&
-                                      user.uid === bUid &&
+                                      user.guestId === bUid &&
                                       userLoading && (
                                         <tr>
                                           <td colSpan={4} className="">
@@ -152,7 +145,7 @@ const UsersPage = () => {
                                         </tr>
                                       )}
                                     {showOrders &&
-                                      user.uid === bUid &&
+                                      user.guestId === bUid &&
                                       !userLoading &&
                                       !orders?.length && (
                                         <tr className="">
@@ -167,7 +160,7 @@ const UsersPage = () => {
                                         </tr>
                                       )}
                                     {showOrders &&
-                                      user.uid === bUid &&
+                                      user.guestId === bUid &&
                                       orders &&
                                       orders
                                         .sort(

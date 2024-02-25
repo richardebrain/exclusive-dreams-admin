@@ -1,4 +1,4 @@
-import { getUserOrderFromDb } from "@/utils/firebase";
+import { getGuestOrderFromDb, getUserOrderFromDb } from "@/utils/firebase";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -13,7 +13,7 @@ export async function GET(
 ) {
   console.log(params);
   const { userid } = params;
-  const res = await getUserOrderFromDb(userid);
+  const res = await getGuestOrderFromDb(userid);
   return NextResponse.json(res);
   //   const admin = await getAdminFromDb(userid);
   //   return NextResponse.json(admin);
